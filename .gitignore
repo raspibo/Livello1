@@ -19,7 +19,7 @@ lib/
 lib64/
 parts/
 sdist/
-var/
+#var/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -60,3 +60,10 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+#dokuwiki
+/var/www/dokuwiki
+/etc/nginx/dokuwiki*
+
+#web
+.htpasswd
