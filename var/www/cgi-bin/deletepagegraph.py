@@ -36,12 +36,12 @@ FileName = ""
 print (mhl.MyHtml())
 print (mhl.MyHtmlHead())
 
-form=cgi.FieldStorage()
+#form=cgi.FieldStorage()
 
-if FormName not in form:
-	print ("<h3>Manca il valore: </h3>",FormName)
-else:
-	FileName = cgi.escape(form[FormName].value)
+#if FormName not in form:
+#	print ("<h3>Manca il valore: </h3>",FormName)
+#else:
+#	FileName = cgi.escape(form[FormName].value)
 
 TestoPagina = TestoPagina + FileName
 
@@ -52,13 +52,28 @@ print ("<h1>","<center>",TestoPagina,"</center>","</h1>")
 # Eventuale help/annotazione
 #print ("...............<br/><br/>")
 
-if FileName == "":
-	pass
-else:
-	print("Eliminazione del file in corso ...<br/>")
-	os.remove(FileName)
-	print("<br/>... completato.<br/><hr/>")
+#if FileName == "":
+#	pass
+#else:
+#	print("Eliminazione del file in corso ...<br/>")
+#	os.remove(FileName)
+#	print("<br/>... completato.<br/><hr/>")
 
+form=cgi.FieldStorage()
+
+for i in form.keys():
+	if i not in form:							# Non ci sara` mai
+		print ("<h3>Manca il valore: </h3>",i)
+	elif i == FormName:
+		for j in form.getlist(FormName):
+			print ("Error:")
+			print (os.remove(j))
+			print (", <b>file eliminato:</b> ",j,"<br/>")
+	else:
+		print ("<h3>Cosa e` successo ? Questo e` il valore in form: </h3>",i)
+
+
+"""
 print ("<h2>Report:</h2>")
 print ("<br>")
 print ("<table border=\"1\" cellspacing=\"0\" cellpadding=\"3\">")
@@ -71,6 +86,7 @@ print ("")
 print ("</td>")
 print ("</tr>")
 print ("</table>")
+"""
 
 
 # INDIETRO

@@ -111,9 +111,11 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 					STRING = (flt.Decode(MyDB.hget(KeySort[i],"RangeValori")))
 					# splitto alla virgola e uso il primo (0) ed il secondo (1) come numeri interi separatamente
 					#if int(Valore) not in range (int(STRING.split(",")[0]),int(STRING.split(",")[1]+"1")):	# NON FUNZIONA
-					if int(Valore) < int(STRING.split(",")[0]) or int(Valore) > int(STRING.split(",")[1]):
+					if float(Valore) < float(STRING.split(",")[0]) or float(Valore) > float(STRING.split(",")[1]):
 						if not MyDB.hexists(KeySort[i]+":Allarmi","RangeValori"):
-							print (Valore)
+							print (STRING.split(",")[0],Valore,STRING.split(",")[1])
+							print(type(STRING.split(",")[0]))
+							print(type(Valore))
 							# Preparo i "default" nel caso non siano stati configurati
 							Descrizione="Manca descrizione"
 							if MyDB.hexists(KeySort[i],"Descrizione"):
@@ -126,7 +128,7 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 							MyDB.hset(KeySort[i]+":Allarmi","RangeValori","Alarm")
 							MyDB.expire(KeySort[i]+":Allarmi",Timer)
 				if MyDB.hexists(KeySort[i],"ValoreMin"):
-					if Valore < flt.Decode(MyDB.hget(KeySort[i],"ValoreMin")):
+					if float(Valore) < float(flt.Decode(MyDB.hget(KeySort[i],"ValoreMin"))):
 						if not MyDB.hexists(KeySort[i]+":Allarmi","ValoreMin"):
 							# Preparo i "default" nel caso non siano stati configurati
 							Descrizione="Manca descrizione"
@@ -140,7 +142,7 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 							MyDB.hset(KeySort[i]+":Allarmi","ValoreMin","Alarm")
 							MyDB.expire(KeySort[i]+":Allarmi",Timer)
 				if MyDB.hexists(KeySort[i],"ValoreMax"):
-					if Valore > flt.Decode(MyDB.hget(KeySort[i],"ValoreMax")):
+					if float(Valore) > float(flt.Decode(MyDB.hget(KeySort[i],"ValoreMax"))):
 						if not MyDB.hexists(KeySort[i]+":Allarmi","ValoreMax"):
 							# Preparo i "default" nel caso non siano stati configurati
 							Descrizione="Manca descrizione"

@@ -329,7 +329,7 @@ print ("""
 In questa sezione puoi selezionare per eliminare, qualsiasi chiave.
 </p>
 <p>
-La possibilita` di selezione e data dal filtro che stai utilizzando.
+La selezione e` dipendente dal filtro in uso.
 </p>
 """)
 
@@ -337,10 +337,11 @@ print ("<table>")   # 2 colonne
 
 print ("<tr>")
 print ("<td>")
-print ("Seleziona la chiave da eliminare:")
+print ("<b>Chiavi selezionate per l'eliminazione:</b>")
 print ("</td>")
 print ("<td>")
-print (mhl.MyDropDown(FormName,flt.DecodeList(MyDB.keys(RedisKey)),""))   #
+for i in range (len(flt.DecodeList(MyDB.keys(RedisKey)))):
+	print (mhl.MyTextForm(FormName,flt.DecodeList(MyDB.keys(RedisKey))[i],"40","required","readonly"))
 print ("</td>")
 print ("</tr>")
 

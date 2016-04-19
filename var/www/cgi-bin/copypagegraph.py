@@ -84,5 +84,43 @@ print ("</tr>")
 print ("</table>")
 
 
+# INDIETRO
+
+print ("<table>")   # 3 colonne
+
+print ("<tr>")
+print ("<td>")
+#print ("")
+print ("</td>")
+print ("<td>")
+#print ("")
+print ("</td>")
+print ("<td>")
+#print ("")
+print ("</td>")
+print ("</tr>")
+
+print ("<tr>")
+print ("<td colspan=\"3\">")
+#print ("<hr/>") # La linea orizzontale
+print ("</td>")
+print ("</tr>")
+
+print ("<tr>")
+print ("<td>")
+print ("")  # Testo nella 1a colonna
+print ("</td>")
+print ("<td>")
+print ("<button type=\"button\" onclick='location.href=\"/cgi-bin/selectpagegraph.py\"'>Indietro</button>")
+print ("</td>")
+print ("<td>")
+print ("")  # Testo nella 3a colonna
+print ("</td>")
+print ("</tr>")
+
+print ("</table>")
+
+
+
 # End web page
 print (mhl.MyHtmlBottom())

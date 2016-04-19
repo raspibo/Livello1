@@ -44,19 +44,16 @@ print ("<h1>","<center>",TestoPagina,"</center>","</h1>")
 
 form=cgi.FieldStorage()
 
-if MyDB.exists(cgi.escape(form[FormName].value)):
-    print ("<h2>Chiave eliminata:</h2>")
-    #print ("<br>")
-    print ("<table border=\"1\" cellspacing=\"0\" cellpadding=\"3\">")  # 1 colonna
-    print ("<tr>")
-    print ("<td>")
-    print (cgi.escape(form[FormName].value))
-    print ("</td>")
-    print ("</tr>")
-    print ("</table>")
-    MyDB.delete(cgi.escape(form[FormName].value))
-else:
-    print ("<h3>Manca la chiave: </h3>",cgi.escape(form[FormName].value))
+for i in form.keys():
+	if i not in form:							# Non ci sara` mai
+		print ("<h3>Manca il valore: </h3>",i)
+	elif i == FormName:
+		for j in form.getlist(FormName):
+			print ("Deleted:")
+			print (MyDB.delete(j))
+			print (", ID:",j,"<br/>")
+	else:
+		print ("<h3>Cosa e` successo ? Questo e` il valore in form: </h3>",i)
 
 
 # Prova INDIETRO
@@ -86,7 +83,7 @@ print ("<td>")
 print ("")  # Testo nella 1a colonna
 print ("</td>")
 print ("<td>")
-print ("<button type=\"button\" onclick=\"/cgi-bin/selectkeysredis.py\">Indietro</button>")
+print ("<button type=\"button\" onclick='location.href=\"/cgi-bin/selectkeysredis.py\"'>Indietro</button>")
 print ("</td>")
 print ("<td>")
 print ("")  # Testo nella 3a colonna

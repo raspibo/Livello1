@@ -135,8 +135,7 @@ print ("<hr/>","<br/>")
 
 # Eventuale help/annotazione
 print ("""
-<b>Elimina file di un "grafico"</b>
-<br/>
+<b>Seleziona files "grafici" da eliminare</b>
 <br/>
 """)
 
@@ -147,7 +146,9 @@ print ("<table>")
 
 print ("<tr>")
 print ("<td>")
-print (mhl.MyDropDown(FormName,FileList,""))
+#print (mhl.MyDropDown(FormName,FileList,""))
+for i in range (len(FileList)):
+	print (mhl.MyCheckboxForm(FormName,FileList[i]),FileList[i],"<br/>")
 print ("</td>")
 print ("</tr>")
 print ("<tr>")
