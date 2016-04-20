@@ -8,6 +8,6 @@ Per il file "/var/www/dygraph-combined.js", fate riferimento al sito web: http:/
 MEMO:
 
 Comandi usati per copia su repository git:
-  cp -varp --parents /var/www/ .
-  cp -varp --parents /etc/nginx/dokuwiki* /etc/nginx/fcgiwrap.conf /etc/nginx/sites-available/level1 /etc/nginx/sites-enabled/level1 .
+  cp -varpu --parents /var/www/ .
+  cp -varpu --parents /etc/nginx/dokuwiki* /etc/nginx/fcgiwrap.conf /etc/nginx/sites-available/level1 /etc/nginx/sites-enabled/level1 .
 

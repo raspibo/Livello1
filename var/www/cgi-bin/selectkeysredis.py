@@ -67,8 +67,8 @@ else:
 	RedisKey = cgi.escape(form[FormName].value)
 
 print ("<h2>","<center>","Filtra chiave Redis","</center>","</h2>")
-print ("Puoi usare i caratteri \"*\" e \"?\", esempi:<br/>")
-print ("*stringa*, *stringafinale, *stringacon3caratterifinali???<br/><br/>")
+print ("Puoi usare i caratteri \"*\" e \"?\", esempi: ")
+print ("*stringa*, *stringafinale, *stringacon3caratterifinali???<br/>")
 
 # Preselezioni
 print ("<p>Preselezioni</p>")
@@ -164,7 +164,8 @@ for i in MyDB.keys(RedisKey):
 print ("</table>")
 # Fine tabella visualizzazione
 
-print ("<hr/><br/>")
+#print ("<hr/><br/>")
+print ("<hr/>")
 
 
 print ("<h2>","<center>","Modifica chiave Redis","</center>","</h2>")
@@ -316,11 +317,11 @@ print (mhl.MyEndForm())
 
 
 #print ("<hr/><br/>")
-print ("<br/>")
+print ("<hr/>")
 
 
 print ("<h2>","<center>","Eliminazione chiave Redis","</center>","</h2>")
-print ("<strong><center>ATTENZIONE: Non ci sara` una richiesta di conferma</center></strong><br/>")
+print ("<strong><center>ATTENZIONE: Non ci sara` una richiesta di conferma</center></strong>")
 
 # Inizio del form
 print (mhl.MyActionForm("/cgi-bin/deletekeyredis.py","POST"))
@@ -335,13 +336,25 @@ La selezione e` dipendente dal filtro in uso.
 
 print ("<table>")   # 2 colonne
 
+# Sono ideciso, questa versione, dove comanda il filtro:
+#print ("<tr>")
+#print ("<td>")
+#print ("<b>Chiavi selezionate per l'eliminazione:</b>")
+#print ("</td>")
+#print ("<td>")
+#for i in range (len(flt.DecodeList(MyDB.keys(RedisKey)))):
+#	print (mhl.MyTextForm(FormName,flt.DecodeList(MyDB.keys(RedisKey))[i],"50","required","readonly"))
+#print ("</td>")
+#print ("</tr>")
+
+# .. o questa versione, dove, oltre al filtro, si devono anche selezionare una per una:
 print ("<tr>")
 print ("<td>")
-print ("<b>Chiavi selezionate per l'eliminazione:</b>")
+print ("<b>Seleziona le chiavi da eliminare:</b>")
 print ("</td>")
 print ("<td>")
 for i in range (len(flt.DecodeList(MyDB.keys(RedisKey)))):
-	print (mhl.MyTextForm(FormName,flt.DecodeList(MyDB.keys(RedisKey))[i],"40","required","readonly"))
+	print (mhl.MyCheckboxForm(FormName,flt.DecodeList(MyDB.keys(RedisKey))[i]),flt.DecodeList(MyDB.keys(RedisKey))[i],"<br/>")
 print ("</td>")
 print ("</tr>")
 
