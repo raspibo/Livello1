@@ -20,7 +20,7 @@ TestoPagina="Aggiungi chiave \"sets\" Redis"
 ConfigFile="../conf/config.json"
 ExecFile="/cgi-bin/writesetsredis.py"
 # Redis "key"
-RedisKey = "sets:*"
+RedisKey = "sets:[graph|alarms]:ID"
 # Form name/s
 FormName = "rkey"		# Alla fine ho usato una "manuale" perche` l'EXE e` usato 'parametrizzato' anche da altri scripts
 
@@ -44,11 +44,9 @@ print ("""
 Questa form e` da utilizzarsi SOLO per il primo inserimento di un gruppo.<br/>
 
 Nel campo "Key", devi digitare una nuova chiave, assegnandogli un'identificativo a piacere
-(per es.: sets:allarmi:piano2), poi selezionare dalla voce "Aggiungi", una chiave fra quelle
-proposte (ho messo un filtro, ma attenzione, controllare sempre), che sara` parte del gruppo
-(a cui verranno poi aggiunte/eliminate altre tramite altra form).<br/>
-
-Non ho dato la possibilita` di inserimenti multipli.<br/>
+(per es.: sets:alarms:piano2), poi selezionare dalla voce "Aggiungi", una o piu` chiavi
+fra quelle proposte (ho messo un filtro, ma controllate sempre cosa selezionate), che
+sara`/saranno parte del gruppo.<br/>
 
 Ho previsto una notazione standard d'inserimento.<br/>
 Per ogni tipologia di gruppo:<br/>
@@ -57,7 +55,7 @@ Per ogni tipologia di gruppo:<br/>
 <li>Allarmi</li>
   <ul>
   <li>Servira` per identificare un gruppo di periferiche che faranno capo ad un solo gruppo per quel che riguarda l'attivazione e disattivazione</li>
-  <li>Sintassi "sets:alarms:identificativo"</li>
+  <li>Sintassi "<b>sets:alarms:</b>identificativo"</li>
 	<ul>
 	<li>Identificativo</li>
 	  <ul>
@@ -69,7 +67,7 @@ Per ogni tipologia di gruppo:<br/>
 <li>Grafico</li>
   <ul>
   <li>Servira` per identificare un gruppo di sensori/utenze che saranno raggruppati nella creazione e visualizzazione di un grafico tempo/valori</li>
-  <li>Sintassi "sets:graph:identificativo"</li>
+  <li>Sintassi "<b>sets:graph:</b>identificativo"</li>
 	<ul>
 	<li>Identificativo</li>
 	  <ul>

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-# Questo file legge il file di configurazione,
-# trova e modifica il parametro eseguendo il rispettivo "write*.py"
+# Copia file
 
 # Serve per la parte di gestione html in python
 import cgi

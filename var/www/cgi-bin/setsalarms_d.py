@@ -44,9 +44,11 @@ MyDB = flt.OpenDBFile(ConfigFile)
 
 # Controllo se piu` di un argomento o se richiesto l'help
 if len(sys.argv) != 2 or sys.argv[1] == "-h":
-	print ("\n\tUso: %s <RedisKey>" % sys.argv[0])
+#	print ("\n\tUso: %s <RedisKey>" % sys.argv[0])
+	print ("\n\tUso: {0:s} <RedisKey>".format(sys.argv[0]))
 	print ("""
-Questo programma prende una chiave Redis di gruppo (sets), la elabora,
+Questo programma prende una chiave Redis di gruppo (sets),
+la elabora,
 e ?
 """)
 
@@ -55,7 +57,10 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 	# Setto le variabili per comodita` e chiarezza di programma
 	Key=sys.argv[1]			# La chiave e` nel formato sets:alarms:ID
 	KeySort=flt.DecodeList(MyDB.sort(Key,alpha=1))	# Devo mantenerla sempre ordinata, altrimenti i dati non coincidono, e` una stringa, quindi "alpha=1"
-	KeyFunction=flt.Decode(MyDB.hget(Key+":Config","Funzionamento"))
+	# Contorllo e set del funzionamento, se la chaive non siste, rimane OFF
+	KeyFunction="Off"
+	if MyDB.hexists(Key+":Config","Funzionamento"):
+		KeyFunction=flt.Decode(MyDB.hget(Key+":Config","Funzionamento"))
 	Timer=int(flt.Decode(MyDB.hget(Key+":Config","Timer")))*60			# Mi serve in secondi e lo manterrei per memoria allarme
 	#TimerInizio=int(time.time())				# Tempo attuale meno Timer, cosi` il ciclo inizia subito
 	time.sleep(3)	# Ritardo attivazione, forse sarebbe meglio parametrizzare anche questo ?
@@ -80,10 +85,10 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 	KeySumDalle=int(KeyHd)*60+int(KeyMd)
 	KeySumAlle=int(KeyHa)*60+int(KeyMa)
 	
-	while True:
+	while MyDB.exists(Key) and MyDB.exists(Key+":Config"):
 		NowInMinute=int(time.strftime("%H",time.localtime()))*60+int(time.strftime("%M",time.localtime()))
 		#print ("Dalle:", KeySumDalle, "Now:", NowInMinute, "Alle:", KeySumAlle)	# myDebug
-		time.sleep(3)	# MyDebug
+		#time.sleep(3)	# MyDebug
 		if KeyFunction == "On" or ( KeyFunction == "Auto" and ( KeySumDalle <= NowInMinute <= KeySumAlle ) ) :
 			for i in range (len(KeySort)):
 				# Devo prendere l'ultimo ":Valori" dalla chiave (nella chiave, e` un gruppo "sets")
@@ -185,3 +190,6 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 							flt.InviaAvviso(MyDB,"msg:level1:Valore:"+flt.AlertsID()[0],"alert","Allarme "+Descrizione,Valore,UM,flt.AlertsID()[1])
 							MyDB.hset(KeySort[i]+":Allarmi","Valore","Alarm")
 							MyDB.expire(KeySort[i]+":Allarmi",Timer)
+		elif KeyFunction == "Off" :
+			print ("Funzionamento : Off")
+			exit()

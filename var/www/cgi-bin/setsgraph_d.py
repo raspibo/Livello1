@@ -43,10 +43,11 @@ MyDB = flt.OpenDBFile(ConfigFile)
 
 # Controllo se piu` di un argomento o se richiesto l'help
 if len(sys.argv) != 2 or sys.argv[1] == "-h":
-	print ("\n\tUso: %s <RedisKey>" % sys.argv[0])
+#	print ("\n\tUso: %s <RedisKey>" % sys.argv[0])
+	print ("\n\tUso: {0:s} <RedisKey>".format(sys.argv[0]))
 	print ("""
-Questo programma prende una chiave Redis di gruppo (sets), la elabora,
-reinserendo i valori in una nuova lista
+Questo programma prende una chiave Redis di gruppo (sets),
+la elabora, reinserendo i valori in una nuova lista
 e crea il rispettivo file .csv
 """)
 
