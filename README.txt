@@ -10,4 +10,4 @@ MEMO:
 Comandi usati per copia su repository git:
   cp -varpu --parents /var/www/ .
   cp -varpu --parents /etc/nginx/dokuwiki* /etc/nginx/fcgiwrap.conf /etc/nginx/sites-available/level1 /etc/nginx/sites-enabled/level1 .
-
+  cp -varpu --parents /etc/rc.local .
