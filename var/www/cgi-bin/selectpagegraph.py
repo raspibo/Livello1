@@ -40,8 +40,8 @@ NewFileName = ""+time.strftime("%y%m%d%H%M%S")+".csv"
 
 # Cerco
 # Prima quelli della "archive", poi aggiungo in testa quella della www
-FileList = glob.glob(Dirs[1]+"*.csv")
-FileList[0:0] = glob.glob(Dirs[0]+"*.csv")
+FileList = sorted(glob.glob(Dirs[1]+"*.csv"))
+FileList[0:0] = sorted(glob.glob(Dirs[0]+"*.csv"))
 
 # Start web page - Uso l'intestazione "web" della mia libreria
 print (mhl.MyHtml())

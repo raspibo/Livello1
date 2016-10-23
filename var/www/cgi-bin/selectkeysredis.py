@@ -317,6 +317,54 @@ print (mhl.MyEndForm())
 
 
 #print ("<hr/><br/>")
+print ("<br/>")
+
+
+# Inizio del form
+# Analisi e Modifica LISTS
+print (mhl.MyActionForm("/cgi-bin/analistsredis.py","POST"))
+print ("""
+<p>
+In questa sezione puoi selezionare per analizzare e modificare le chiavi "lists",
+sono praticamente le chiavi "Valori" delle utenze.
+</p>
+""")
+
+print ("<table>")   # 2 colonne
+
+print ("<tr>")
+print ("<td>")
+print ("Seleziona la chiave \"lists\" da modificare:")
+print ("</td>")
+print ("<td>")
+#print (mhl.MyDropDown(FormName,flt.DecodeList(MyDB.keys(RedisKey)),""))
+print (mhl.MyDropDown(FormName,RedisKeyList,""))
+print ("</td>")
+print ("</tr>")
+
+print ("<tr>")
+print ("<td colspan=\"2\">")
+#print ("<hr/>") # La linea orizzontale
+print ("</td>")
+print ("</tr>")
+
+print ("<tr>")
+print ("<td>")
+print ("")  # Testo nella 1a colonna
+print ("</td>")
+print ("<td>")
+print (mhl.MyButtonForm("submit","Analizza e Modifica"))
+print ("</td>")
+print ("</tr>")
+
+print ("</table>")
+
+
+# End form
+print (mhl.MyEndForm())
+
+
+#print ("<hr/><br/>")
 print ("<hr/>")
 
 

@@ -48,20 +48,27 @@ e crea il rispettivo file .csv
 
 if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 	# Setto le variabili per comodita` e chiarezza di programma
-	Key=sys.argv[1]
-	KeyVal=Key+":Valori"
+	KeyVal=sys.argv[1]
+	Key=KeyVal[:-7]		# Toglie ":Valori"
 	KeySort=flt.DecodeList(MyDB.sort(Key,alpha=1))	# Devo mantenerla sempre ordinata, altrimenti i dati non coincidono, e` una stringa, quindi "alpha=1"
 	# Ho usato il secondo e terzo valore (sets:NOME:ID), perche potrebbero esserci dei duplicati fra allarmi e grafici e .. altro (se ci sara`)
 	FileName=DirBase+"/"+Key.split(":")[1]+Key.split(":")[2]+".csv"
 	if os.path.isfile(FileName):
+		print ("Delete")
 		os.remove(FileName)								# Elimino il file se esiste
 	
-	IntestazioneCSV="Data"
-	for i in range (len(KeySort)):
-		if MyDB.hexists(KeySort[i],"Descrizione"):
-			Descrizione=flt.Decode(MyDB.hget(KeySort[i],"Descrizione"))
-		IntestazioneCSV=IntestazioneCSV+","+Descrizione
-	flt.WriteFileData(FileName,IntestazioneCSV+"\n")								# New
+	# Questo blocco scrive l'intestazione nel file .csv (se non esiste il file)
+	# Ho fatto questo perche` se viene eliminato il file, magari dopo che lo si e`
+	# salvato, se il programma stava girando, si blocca.
+	if not os.path.isfile(FileName):
+		IntestazioneCSV="Data"
+		for i in range (len(KeySort)):
+			Descrizione="none"	# Metto qualcosa nel caso mancasse la descrizione
+			if MyDB.hexists(KeySort[i],"Descrizione"):
+				Descrizione=flt.Decode(MyDB.hget(KeySort[i],"Descrizione"))
+			IntestazioneCSV=IntestazioneCSV+","+Descrizione
+		flt.WriteFileData(FileName,IntestazioneCSV+"\n")								# New
+	
 	for i in range (MyDB.llen(KeyVal)):
 		ValoriCSV=flt.Decode(MyDB.lindex(KeyVal,i))
 		flt.AddFileData(FileName,ValoriCSV+"\n")

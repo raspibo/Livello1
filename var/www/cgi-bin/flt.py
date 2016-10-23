@@ -12,12 +12,30 @@ tutte le altre funzioni pensavo di metterle qua.
 Appunto: pensavo ..  e invece ..
 
 Aggiornamenti: Sat 19 Mar 2016 08:30:53 AM CET
+Aggiornamento: Sun 09 Oct 2016 10:33:55 AM CEST
 """
 
 import redis,os,socket,time
 
 # La mia libreria Json
 import mjl
+
+# MQTT (copio dall'esempio)
+import sys
+try:
+    import paho.mqtt.publish as publish
+except ImportError:
+    # This part is only required to run the example from within the examples
+    # directory when the module itself is not installed.
+    #
+    # If you have the module installed, just use "import paho.mqtt.publish"
+    import os
+    import inspect
+    cmd_subfolder = os.path.realpath(os.path.abspath(os.path.join(os.path.split(inspect.getfile( inspect.currentframe() ))[0],"../src")))
+    if cmd_subfolder not in sys.path:
+        sys.path.insert(0, cmd_subfolder)
+    import paho.mqtt.publish as publish
+
 
 # Ho forse personalizzato troppo questa libreria/funzione,
 # Purtroppo credo che la utilizzero` spesso, e mantenere il file di configurazione
@@ -102,12 +120,12 @@ def NetCheck(Hostname,Port):
 # database,messaggio,tipo,descrizione,valore,unita`dimisura,data
 # DB,msg:{pc}:{id}:<data&ora>,<alert/alarm>,Descrizione,Valore,Unita` di misura,Data
 def InviaAvviso(DB,MsgID,Type,Desc,Value,UM,Date):
-    Host=Decode(DB.hget("redis:server:message","hostname"))
+    Hostname=Decode(DB.hget("redis:server:message","hostname"))
     Port=Decode(DB.hget("redis:server:message","port"))
     Database=Decode(DB.hget("redis:server:message","database"))
     Password=Decode(DB.hget("redis:server:message","password"))
     if NetCheck(Host,int(Port)):
-        MyMsgDB = OpenDB(Host,Port,Database,Password)
+        MyMsgDB = OpenDB(Hostname,Port,Database,Password)
         MyMsgDB.hmset(MsgID, {"type": Type, "desc": Desc, "value": Value, "um": UM, "date": Date})
     else:
         print ("Non posso inviare l\'avviso a \"%s:%d\".\n" % (Hostname,Port))
@@ -119,3 +137,26 @@ def AlertsID():
     #MsgType="alert"
     MsgDate=time.strftime("%Y/%m/%d %H:%M:%S",time.localtime())
     return MsgIDate,MsgDate
+
+## Funzione invio dati al broker MQTT (Mosquitto)
+# Questa e` la definizione nella libreria paho-mqtt:
+# def single(topic, payload=None, qos=0, retain=False, hostname="localhost",
+#     port=1883, client_id="", keepalive=60, will=None, auth=None,
+#     tls=None, protocol=paho.MQTTv311, transport="tcp"):
+# Questa sarebbe la riga completa, al momento uso solo il topic ed il messaggio,
+# il resto e` preso dalla configurazione inserita in redis:
+#def InviaMqttData(Topic,Payload,QOS,Retain,Hostname,Port,CleintID,Keepalive,Will,Auth,TLS,Protocol,Transport):
+# C'e` un problema, la definzione l'ho presa dalla "level1", dove DB era definito, qua, glielo devo passare !!!
+def InviaMqttData(DB,Topic,Payload):
+    Hostname=Decode(DB.hget("mqttbroker:server:message","hostname"))
+    Port=int(Decode(DB.hget("mqttbroker:server:message","port")))
+    User=Decode(DB.hget("mqttbroker:server:message","user")) 
+    Password=Decode(DB.hget("mqttbroker:server:message","password"))
+    if User == "" or Password == "":
+        Auth= {'username':'none', 'password':'none'}
+    else:
+        Auth= { 'username' : User , 'password' : Password } # Questa e` da verificare ***
+    if NetCheck(Hostname,Port):
+        publish.single(Topic, Payload, hostname=Hostname, port=Port, auth=Auth)
+    else:
+        print ("Non posso trasmettere a \"%s:%s\".\n" % (Hostname,Port))

@@ -27,7 +27,7 @@ SOFTWARE.
 	ri-elabora e ?
 
 	Questo programma, una volta eseguito, si deve interrompere solo se si
-	effettuano modifiche alla chiave (gruppo) e/o alla suo aconfigurazione,
+	effettuano modifiche alla chiave (gruppo) e/o alla sua configurazione,
 	altrimenti dovra` sempre "girare".
 """
 
@@ -85,6 +85,7 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 	KeySumDalle=int(KeyHd)*60+int(KeyMd)
 	KeySumAlle=int(KeyHa)*60+int(KeyMa)
 	
+	# Finche` esistono le "chiavi" (sensore e valori)
 	while MyDB.exists(Key) and MyDB.exists(Key+":Config"):
 		NowInMinute=int(time.strftime("%H",time.localtime()))*60+int(time.strftime("%M",time.localtime()))
 		#print ("Dalle:", KeySumDalle, "Now:", NowInMinute, "Alle:", KeySumAlle)	# myDebug
@@ -113,7 +114,7 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 				# Se esiste RangeValori, e il valore non rientra nel range, e non esiste allarme attivo da tempoX .. parte un nuovo allarme.
 				if MyDB.hexists(KeySort[i],"RangeValori"):
 					# Ho dovuto leggere il range e metterlo in una stringa ..
-					STRING = (flt.Decode(MyDB.hget(KeySort[i],"RangeValori")))
+					STRING = flt.Decode(MyDB.hget(KeySort[i],"RangeValori"))
 					# splitto alla virgola e uso il primo (0) ed il secondo (1) come numeri interi separatamente
 					#if int(Valore) not in range (int(STRING.split(",")[0]),int(STRING.split(",")[1]+"1")):	# NON FUNZIONA
 					if float(Valore) < float(STRING.split(",")[0]) or float(Valore) > float(STRING.split(",")[1]):
@@ -174,6 +175,9 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 							flt.InviaAvviso(MyDB,"msg:level1:ValoreOn:"+flt.AlertsID()[0],"alert","Allarme "+Descrizione,Valore+"/"+flt.Decode(MyDB.hget(KeySort[i],"ValoreOn")),UM,flt.AlertsID()[1])
 							MyDB.hset(KeySort[i]+":Allarmi","ValoreOn","Alarm")
 							MyDB.expire(KeySort[i]+":Allarmi",Timer)
+				# PROBLEMA !!! questo controllo finale non va bene, meglio che tutti gli allarmi/avvisi abbiano
+				# compilato il campo ValoreOn.
+				# *** Quindi questa roba e` da toglire/sostituire con "Allarme", che e` ancora tutto da decidere
 				else:
 					# Qua potrei avere dei problemi con le sonde di temperatura che misurano "1"
 					# A meno che: alle sonde di temperatura non venga messo un "ValoreOn" a "-40" per esempio.
@@ -193,3 +197,5 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 		elif KeyFunction == "Off" :
 			print ("Funzionamento : Off")
 			exit()
+	else:
+		print ("""       Mancano dei parametri, oppure la chiave specificata non esiste         """)
