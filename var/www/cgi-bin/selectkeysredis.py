@@ -277,7 +277,7 @@ print ("""
 <p>
 In questa sezione puoi selezionare per modificare le chiavi "sets",
 sono i gruppi di utenze che hai creato, un gruppo di sensori allarme,
-uno di temperature, .. (in valutazione i gruppi misti)
+uno di temperature, .. ("sets:[alarms,graph]:*")
 </p>
 """)
 

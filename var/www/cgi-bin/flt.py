@@ -124,7 +124,7 @@ def InviaAvviso(DB,MsgID,Type,Desc,Value,UM,Date):
     Port=Decode(DB.hget("redis:server:message","port"))
     Database=Decode(DB.hget("redis:server:message","database"))
     Password=Decode(DB.hget("redis:server:message","password"))
-    if NetCheck(Host,int(Port)):
+    if NetCheck(Hostname,int(Port)):
         MyMsgDB = OpenDB(Hostname,Port,Database,Password)
         MyMsgDB.hmset(MsgID, {"type": Type, "desc": Desc, "value": Value, "um": UM, "date": Date})
     else:

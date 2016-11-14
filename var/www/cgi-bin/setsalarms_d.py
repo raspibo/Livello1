@@ -31,7 +31,7 @@ SOFTWARE.
 	altrimenti dovra` sempre "girare".
 """
 
-import os,time,json,redis,sys
+import os,time,json,redis,sys,datetime
 import paho.mqtt.client as mqtt
 import mjl, mhl, flt	# Non servono tutte, ormai le metto d'abitudine ;)
 
@@ -61,7 +61,7 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 	KeyFunction="Off"
 	if MyDB.hexists(Key+":Config","Funzionamento"):
 		KeyFunction=flt.Decode(MyDB.hget(Key+":Config","Funzionamento"))
-	Timer=int(flt.Decode(MyDB.hget(Key+":Config","Timer")))*60			# Mi serve in secondi e lo manterrei per memoria allarme
+	Timer=int(flt.Decode(MyDB.hget(Key+":Config","Timer")))			# Mi serve in secondi e lo manterrei per memoria allarme avevo messo *60, ma e` gia` in secondi
 	#TimerInizio=int(time.time())				# Tempo attuale meno Timer, cosi` il ciclo inizia subito
 	time.sleep(3)	# Ritardo attivazione, forse sarebbe meglio parametrizzare anche questo ?
 	
@@ -96,6 +96,26 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 				# ma solo dopo la virgola 		.split(",")[1]
 				# perche` prima c'e` la data		.split(",")[0]
 				Valore=flt.Decode(MyDB.lindex(KeySort[i]+":Valori",-1)).split(",")[1]
+				if not MyDB.hexists(KeySort[i]+":Allarmi","DataValore"):
+					# .. mi serve anche la data per un nuovo avviso di probabile guasto al 'remote'
+					DataValore=flt.Decode(MyDB.lindex(KeySort[i]+":Valori",-1)).split(",")[0]
+					print(DataValore)
+					# Converto in tipo 'datetime' per il calcolo (sottrazione)
+					ValoreData=datetime.datetime(time.strptime(DataValore, "%Y/%m/%d %H:%M:%S").tm_year,time.strptime(DataValore, "%Y/%m/%d %H:%M:%S").tm_mon,time.strptime(DataValore, "%Y/%m/%d %H:%M:%S").tm_mday,time.strptime(DataValore, "%Y/%m/%d %H:%M:%S").tm_hour,time.strptime(DataValore, "%Y/%m/%d %H:%M:%S").tm_min,time.strptime(DataValore, "%Y/%m/%d %H:%M:%S").tm_sec)
+					# Se da piu` di un'ora non viene aggiornato il valore, c'e` un problema e mando un messaggio
+					# Se adesso - 'ora del valore' e` maggiore di un'ora:
+					if (datetime.datetime.now() - ValoreData) > datetime.timedelta(hours=1):
+						# Preparo i "default" nel caso non siano stati configurati
+						Descrizione="Manca descrizione"
+						if MyDB.hexists(KeySort[i],"Descrizione"):
+							Descrizione=flt.Decode(MyDB.hget(KeySort[i],"Descrizione"))
+						UM=""
+						if MyDB.hexists(KeySort[i],"UM"):
+							UM=flt.Decode(MyDB.hget(KeySort[i],"UM"))
+						# InviaAvviso(DB,MsgID,Type,Desc,Value,UM,Date):
+						flt.InviaAvviso(MyDB,"msg:level1:Valore:"+flt.AlertsID()[0],"alert",Descrizione+", in ritardo lettura/aggiornamento valore (vedi data)",Valore,UM,DataValore)
+						MyDB.hset(KeySort[i]+":Allarmi","DataValore","Ritardo")
+						MyDB.expire(KeySort[i]+":Allarmi","3600")	# Questo e` l'unico che metto a 1 ora fissa.
 				
 				# CI STO` PENSANDO .. mettere qui i default, ma se li metto qui,
 				# vengono ricalcolati ogni volta, se faccio una funzione,

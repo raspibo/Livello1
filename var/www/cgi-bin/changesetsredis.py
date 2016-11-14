@@ -75,8 +75,13 @@ if (flt.Decode(MyDB.type(RedisKey)) == "set" and MyDB.exists(RedisKey)):
 	print ("Contenuto:")
 	print ("</td>")
 	print ("<td>")
-	#print (mhl.MyTextForm("Contenuto",str(flt.DecodeList(MyDB.smembers(RedisKey))),"120","","readonly"))   # Non richiesto
-	print (str(flt.DecodeList(MyDB.smembers(RedisKey))))	# Meglio se lo visualizzo tutto, col form sarei limitato.
+	#print (str(flt.DecodeList(MyDB.smembers(RedisKey))))	# Meglio se lo visualizzo tutto, col form sarei limitato.
+	LISTA = flt.DecodeList(MyDB.smembers(RedisKey))		# Appoggio a variabile l'elenco/lista
+	print ("<fieldset>")								# Ho usato il "fieldset" come separatore/raggruppatore
+	#print ("<legend>Contenuto</legend>")
+	for i in range (len(LISTA)):
+		print (LISTA[i], "<br/>")
+	print ("</fieldset>")
 	print ("</td>")
 	print ("</tr>")
 	

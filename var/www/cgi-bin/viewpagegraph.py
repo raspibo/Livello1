@@ -74,7 +74,7 @@ Doppio click del mouse per ritornare alla visualizzazione globale.
 Con il tasto "Shift" premuto, usa il click del mouse per trascinare l'area di visualizzazione.
 </p>
 
-<div id="graphdiv" style="position:absolute; left:20px; right:20px; top:150px; bottom:20px;"></div>
+<div id="graphdiv" style="position:absolute; left:20px; right:20px; top:200px; bottom:20px;"></div>
 <script type="text/javascript">
   g = new Dygraph(
 
