@@ -17,7 +17,8 @@ import redis
 
 # Parametri generali
 TestoPagina="Analizza e modifica chiave \"lists\" Redis"
-ConfigFile="../conf/config.json"
+DirBase="/var/www"
+ConfigFile=DirBase+"/conf/config.json"
 ExecFile="/cgi-bin/writelistsredis.py"
 # Redis "key"
 RedisKey = "*"  # Tutte le chiavi

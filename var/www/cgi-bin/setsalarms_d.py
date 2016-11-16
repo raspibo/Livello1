@@ -96,6 +96,7 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 				# ma solo dopo la virgola 		.split(",")[1]
 				# perche` prima c'e` la data		.split(",")[0]
 				Valore=flt.Decode(MyDB.lindex(KeySort[i]+":Valori",-1)).split(",")[1]
+				"""
 				if not MyDB.hexists(KeySort[i]+":Allarmi","DataValore"):
 					# .. mi serve anche la data per un nuovo avviso di probabile guasto al 'remote'
 					DataValore=flt.Decode(MyDB.lindex(KeySort[i]+":Valori",-1)).split(",")[0]
@@ -113,9 +114,10 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 						if MyDB.hexists(KeySort[i],"UM"):
 							UM=flt.Decode(MyDB.hget(KeySort[i],"UM"))
 						# InviaAvviso(DB,MsgID,Type,Desc,Value,UM,Date):
-						flt.InviaAvviso(MyDB,"msg:level1:Valore:"+flt.AlertsID()[0],"alert",Descrizione+", in ritardo lettura/aggiornamento valore (vedi data)",Valore,UM,DataValore)
-						MyDB.hset(KeySort[i]+":Allarmi","DataValore","Ritardo")
+						flt.InviaAvviso(MyDB,"msg:level1:RitardoLettura:"+flt.AlertsID()[0],"alert",Descrizione+", in ritardo lettura/aggiornamento valore (vedi data)",Valore,UM,DataValore)
+						MyDB.hset(KeySort[i]+":Allarmi","RitardoLettura","Ritardo")
 						MyDB.expire(KeySort[i]+":Allarmi","3600")	# Questo e` l'unico che metto a 1 ora fissa.
+				""""
 				
 				# CI STO` PENSANDO .. mettere qui i default, ma se li metto qui,
 				# vengono ricalcolati ogni volta, se faccio una funzione,

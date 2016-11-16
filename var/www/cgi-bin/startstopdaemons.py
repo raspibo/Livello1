@@ -16,7 +16,8 @@ import redis,subprocess,os
 
 # Parametri generali
 TestoPagina="Start/Stop Daemons"
-ConfigFile="../conf/config.json"
+DirBase="/var/www"
+ConfigFile=DirBase+"/conf/config.json"
 ExecFile="/cgi-bin/daemons_init.d.py"
 # Redis "key"
 RedisKey = "*"  # Tutte le chiavi, ma in realta` e` settata piu` avanti

@@ -17,7 +17,8 @@ import redis
 
 # Parametri generali
 TestoPagina="Aggiungi chiave \"sets\" Redis"
-ConfigFile="../conf/config.json"
+DirBase="/var/www"
+ConfigFile=DirBase+"/conf/config.json"
 ExecFile="/cgi-bin/writesetsredis.py"
 # Redis "key"
 RedisKey = "sets:[graph|alarms]:ID"
@@ -41,7 +42,7 @@ print ("<h1>","<center>",TestoPagina,"</center>","</h1>")
 #print ("<hr/>","<br/>")
 # Eventuale help/annotazione
 print ("""
-Questa form e` da utilizzarsi SOLO per il primo inserimento di un gruppo.<br/>
+Questa form e` da utilizzarsi SOLO per il primo inserimento di un gruppo (sets).<br/>
 
 Nel campo "Key", devi digitare una nuova chiave, assegnandogli un'identificativo a piacere
 (per es.: sets:alarms:piano2), poi selezionare dalla voce "Aggiungi", una o piu` chiavi

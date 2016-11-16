@@ -16,7 +16,8 @@ import redis
 
 # Parametri generali
 TestoPagina="Aggiunge un gruppo di allarmi (chiave Redis)"
-ConfigFile="../conf/config.json"
+DirBase="/var/www"
+ConfigFile=DirBase+"/conf/config.json"
 ExecFile="/cgi-bin/writesetsredis.py"
 # Redis "key"
 RedisKey = "sets:*"  # chiavi, ma in realta` e` settata piu` avanti

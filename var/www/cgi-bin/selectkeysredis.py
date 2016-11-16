@@ -16,7 +16,8 @@ import redis
 
 # Parametri generali
 TestoPagina="Visualizzazione delle chiavi memorizzate in Redis"
-ConfigFile="../conf/config.json"
+DirBase="/var/www"
+ConfigFile=DirBase+"/conf/config.json"
 ExecFile="/cgi-bin/selectkeysredis.py"
 # Redis "key"
 RedisKey = "*"  # Tutte le chiavi, ma in realta` e` settata piu` avanti

@@ -19,7 +19,8 @@ cgitb.enable()
 
 # Parametri generali // Non li uso tutti, li lascio per "abitudine"
 TestoPagina="Visualizza grafico da file: "
-ConfigFile="../conf/config.json"
+DirBase="/var/www"
+ConfigFile=DirBase+"/conf/config.json"
 ExecFile="none"
 # Redis "key"
 RedisKey = "none"

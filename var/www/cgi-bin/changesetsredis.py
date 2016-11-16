@@ -17,7 +17,8 @@ import redis
 
 # Parametri generali
 TestoPagina="Modifica chiave \"sets\" Redis"
-ConfigFile="../conf/config.json"
+DirBase="/var/www"
+ConfigFile=DirBase+"/conf/config.json"
 ExecFile="/cgi-bin/writesetsredis.py"
 # Redis "key"
 RedisKey = "*"  # Tutte le chiavi

@@ -17,7 +17,8 @@ import redis
 
 # Parametri generali
 TestoPagina="Configurazione server dei messaggi (Redis)"
-ConfigFile="../conf/config.json"
+DirBase="/var/www"
+ConfigFile=DirBase+"/conf/config.json"
 #WriteFile="/cgi-bin/writeredismsg.py"
 # Redis "key"
 RedisKey = "redis:server:message"
