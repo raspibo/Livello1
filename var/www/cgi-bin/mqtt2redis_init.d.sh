@@ -27,20 +27,20 @@ PIDFILE=/var/run/$DAEMON_NAME.pid
 
 do_start () {
     log_daemon_msg "Starting system $DAEMON_NAME daemon"
-    $DAEMON $DAEMON_OPTS &
+    ($DAEMON $DAEMON_OPTS &) &
     log_end_msg $?
 }
 
 do_stop () {
     log_daemon_msg "Stopping system $DAEMON_NAME daemon"
     PID=`ps -e -o pid,cmd | grep "$DAEMON_NAME[.]py" | awk '{ print $1 }'`
-	echo $PID
-	if [ "$PID" != "" ]
-		then
-			kill $PID
-		else
-			echo "$DAEMON_NAME not running ?"
-	fi
+    echo $PID
+    if [ "$PID" != "" ]
+        then
+            kill $PID
+        else
+            echo "$DAEMON_NAME not running ?"
+    fi
     log_end_msg $?
 }
 
@@ -56,14 +56,14 @@ case "$1" in
         ;;
 
     status)
-		PID=`ps -e -o pid,cmd | grep "$DAEMON_NAME[.]py" | awk '{ print $1 }'`
-		if [ "$PID" != "" ]
-		  then
-			echo "$DAEMON_NAME is running!"
-			echo "Pid is: $PID"
-		  else
-			echo "$DAEMON_NAME not running!"
-		fi
+        PID=`ps -e -o pid,cmd | grep "$DAEMON_NAME[.]py" | awk '{ print $1 }'`
+        if [ "$PID" != "" ]
+            then
+                echo "$DAEMON_NAME is running!"
+                echo "Pid is: $PID"
+            else
+                echo "$DAEMON_NAME not running!"
+        fi
         exit $?
         ;;
 

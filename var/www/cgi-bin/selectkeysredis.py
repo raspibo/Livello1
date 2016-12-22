@@ -76,8 +76,10 @@ print ("<p>Preselezioni</p>")
 
 # Questi pulsanti richiamano questo file con "valori" preimpostati
 print (mhl.MyActionForm("","POST"))
-print ("<input type=\"submit\" name=\"{0:s}\" value=\"*:PIR:*\">".format(FormName))
 print ("<input type=\"submit\" name=\"{0:s}\" value=\"*:Temperatura:*\">".format(FormName))
+print ("<input type=\"submit\" name=\"{0:s}\" value=\"*:Umidita:*\">".format(FormName))
+print ("<input type=\"submit\" name=\"{0:s}\" value=\"*:Pioggia:*\">".format(FormName))
+print ("<input type=\"submit\" name=\"{0:s}\" value=\"*:PIR:*\">".format(FormName))
 print ("<input type=\"submit\" name=\"{0:s}\" value=\"*Valori\">".format(FormName))
 print ("<input type=\"submit\" name=\"{0:s}\" value=\"sets:*\">".format(FormName))
 print ("<input type=\"submit\" name=\"{0:s}\" value=\"*:graph:*\">".format(FormName))
