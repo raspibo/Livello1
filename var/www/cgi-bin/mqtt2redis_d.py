@@ -40,55 +40,10 @@ ConfigFile=DirBase+"conf/config.json"
 
 # File di log
 FileName=DirBase+"file_di.log"
+# Lo cancello se esiste (ogni volta che avvio il programma)
 if os.path.isfile(FileName):
     print (".. deleting logfile ..")
     os.remove(FileName)								# Elimino il file se esiste
-
-
-# The callback for when the client receives a CONNACK response from the server.
-def on_connect(client, userdata, rc):
-    print("Connected with result code "+str(rc))
-    # Subscribing in on_connect() means that if we lose the connection and
-    # reconnect then subscriptions will be renewed.
-    client.subscribe("I/+/+/+/+")
-
-# The callback for when a PUBLISH message is received from the server.
-def on_message(client, userdata, msg):
-    # File di log
-    if not os.path.isfile(FileName):
-        WriteFileData(FileName,"File di log"+"\n")								# New log file
-    AddFileData(FileName,msg.topic+" "+str(msg.payload)+"\n")				# Aggiungo messaggi in elaborazione nel file log
-    #print(msg.topic+" "+str(msg.payload))	# MyDebug
-    # Preparazione delle variabili per generazione chiave Redis
-    var = msg.topic
-    Tipo = os.path.basename(var)
-    var = os.path.split(var)[0]
-    PosizioneS = os.path.basename(var)
-    var = os.path.split(var)[0]
-    PosizioneP = os.path.basename(var)
-    var = os.path.split(var)[0]
-    PosizioneC = os.path.basename(var)
-    var = os.path.split(var)[0]
-    TipoIO = os.path.basename(var)
-    #print (TipoIO, PosizioneC, PosizioneP, PosizioneS, Tipo)	# MyDebug
-    # Devo "parsare" il formato per trasformarlo in dizionario python ..
-    # Ho dovuto usare una try/except perche` un esp8266 a volte sembra inviare
-    # due stringhe assieme.
-    try:
-        var = json.loads(flt.Decode(msg.payload))
-    except:
-        AddFileData(FileName,"ERRORE: "+msg.topic+" "+str(msg.payload)+"\n")				# Aggiungo messaggi in elaborazione nel file log
-        var = ''
-    if var != '':
-        #print (var["ID"])
-        MyDB = flt.OpenDBFile(ConfigFile)	# Apro il database Redis
-        # Scrivo il record ("chiave redis") ed il valore
-        IDHASH=TipoIO+":"+PosizioneC+":"+PosizioneP+":"+PosizioneS+":"+Tipo+":"+var["ID"]	# Uso una variabile di appoggio per l'identificatore della chiave "primaria"
-        MyDB.hset(IDHASH, "Valori", IDHASH+":Valori" )										# La seconda chiave e` uguale alla prima con ":Valori" alla fine
-        # Data in formato CSV (dgraph.js)
-        DataCSV=time.strftime("%Y/%m/%d %H:%M:%S", time.localtime())
-        # Lista dei valori, contiene "Data,Valore" e si chiama (quasi) come sopra
-        MyDB.rpush(IDHASH+":Valori",DataCSV+","+var["Valore"])
 
 # Scrive un file
 def WriteFileData(Filename,Dato):
@@ -112,6 +67,55 @@ def AddFileData(Filename,Dato):
         print ("Errore, manca il file", Filename)
         exit()
 
+# Genero file di log (ogni volta che avvio il programma)
+if not os.path.isfile(FileName):
+    WriteFileData(FileName,"File di log"+"\n")								# New log file
+
+
+# The callback for when the client receives a CONNACK response from the server.
+def on_connect(client, userdata, rc):
+    print("Connected with result code "+str(rc))
+    # Subscribing in on_connect() means that if we lose the connection and
+    # reconnect then subscriptions will be renewed.
+    client.subscribe("I/+/+/+/+")
+
+# The callback for when a PUBLISH message is received from the server.
+def on_message(client, userdata, msg):
+    # Data in formato CSV (dgraph.js)
+    # (Spostata qua perche` la uso anche per i messaggi nel file di log)
+    DataCSV=time.strftime("%Y/%m/%d %H:%M:%S", time.localtime())
+    # File di log
+    #AddFileData(FileName,msg.topic+" "+str(msg.payload)+"\n")				# Aggiungo messaggi in elaborazione nel file log
+    #print(msg.topic+" "+str(msg.payload))	# MyDebug
+    # Preparazione delle variabili per generazione chiave Redis
+    var = msg.topic
+    Tipo = os.path.basename(var)
+    var = os.path.split(var)[0]
+    PosizioneS = os.path.basename(var)
+    var = os.path.split(var)[0]
+    PosizioneP = os.path.basename(var)
+    var = os.path.split(var)[0]
+    PosizioneC = os.path.basename(var)
+    var = os.path.split(var)[0]
+    TipoIO = os.path.basename(var)
+    #print (TipoIO, PosizioneC, PosizioneP, PosizioneS, Tipo)	# MyDebug
+    # Devo "parsare" il formato per trasformarlo in dizionario python ..
+    # Ho dovuto usare una try/except perche` un esp8266 a volte sembra inviare
+    # due stringhe assieme.
+    # Modificata try/except perche` capitano errori sulle stringhe (sempre dove c'e` il modulo ESP8266)
+    try:
+        var = json.loads(flt.Decode(msg.payload))
+    except:
+        AddFileData(FileName,DataCSV+":\t"+msg.topic+" "+str(msg.payload)+"\n")				# Scrivo l'errore nel file di log
+        var = ""
+    if var != "":
+        #print (var["ID"])
+        MyDB = flt.OpenDBFile(ConfigFile)	# Apro il database Redis
+        # Scrivo il record ("chiave redis") ed il valore
+        IDHASH=TipoIO+":"+PosizioneC+":"+PosizioneP+":"+PosizioneS+":"+Tipo+":"+var["ID"]	# Uso una variabile di appoggio per l'identificatore della chiave "primaria"
+        MyDB.hset(IDHASH, "Valori", IDHASH+":Valori" )										# La seconda chiave e` uguale alla prima con ":Valori" alla fine
+        # Lista dei valori, contiene "Data,Valore" e si chiama (quasi) come sopra
+        MyDB.rpush(IDHASH+":Valori",DataCSV+","+var["Valore"])
 
 client = mqtt.Client()
 client.on_connect = on_connect
