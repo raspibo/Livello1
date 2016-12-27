@@ -17,15 +17,36 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
+
 # Power On "Level 1"
-if [ -x /var/www/cgi-bin/mqtt2redis_init.d.sh ]
+DAEMON_NAME=mqtt2redis_d
+PID=`ps -e -o pid,cmd | grep "$DAEMON_NAME[.]py" | awk '{ print $1 }'`
+if [ "$PID" == "" ]
 	then
+		echo "Avvio \"mqtt2redis_d\""
 		/var/www/cgi-bin/mqtt2redis_init.d.sh start
 		# .. e un messaggio a centred quando si [ri]avvia
-		redis-cli -h centred hmset msg:alert:alive:level1:$(date +\%Y\%m\%d\%H\%M\%S) type "alert" desc "Centralina level 1 [ri]avviata .." value "On" um "" date "$(date +\%Y/\%m/\%d\ \%H:\%M:\%S)"
+		redis-cli -h centred hmset msg:alert:level1:$(date +\%Y\%m\%d\%H\%M\%S) type "alert" desc "Centralina level 1 [ri]avviata .." value "on" um "" date "$(date +\%Y/\%m/\%d\ \%H:\%M:\%S)"
 	else
-		echo "Non si e\` avviata correttamente Livello 1"
-		exit 1
+		echo "Non si e\` avviata correttamente Livello 1, oppure mqtt2redis_d e\` gia\` avviato:"
+		echo "Actual PID is: $PID"
+		#exit 1
+fi
+
+# Start Telegram Bot
+DAEMON_NAME=bot4livello1
+PID=`ps -e -o pid,cmd | grep "$DAEMON_NAME[.]py" | awk '{ print $1 }'`
+if [ "$PID" == "" ]
+	then
+		echo "Avvio Telegram Bot"
+		cd /home/pi/project/csv2image2telegram
+		su pi -c "python3 bot4livello1.py &"
+		# .. e un messaggio a centred quando si [ri]avvia
+		redis-cli -h centred hmset msg:alert:level1:$(date +\%Y\%m\%d\%H\%M\%S) type "alert" desc "Avvio bot4livello1.py" value "on" um "" date "$(date +\%Y/\%m/\%d\ \%H:\%M:\%S)"
+	else
+		echo "Non si e\` avviato il Telegram Bot, oppure era gia\` avviato:"
+		echo "Actual PID is: $PID"
+		#exit 2
 fi
 
 exit 0
