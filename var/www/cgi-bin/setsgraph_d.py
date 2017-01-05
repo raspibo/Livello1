@@ -57,7 +57,7 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 	Key=sys.argv[1]
 	KeyVal=Key+":Valori"
 	KeySort=flt.DecodeList(MyDB.sort(Key,alpha=1))	# Devo mantenerla sempre ordinata, altrimenti i dati non coincidono, e` una stringa, quindi "alpha=1"
-	Timer=int(flt.Decode(MyDB.hget(Key+":Config","Timer")))*60			# Mi serve in secondi
+	Timer=int(flt.Decode(MyDB.hget(Key+":Config","Timer")))
 	TimerInizioCiclo=int(time.time())-Timer				# Tempo attuale meno Timer, cosi` il ciclo inizia subito
 	# Ho usato il secondo e terzo valore (sets:NOME:ID), perche potrebbero esserci dei duplicati fra allarmi e grafici e .. altro (se ci sara`)
 	FileName=DirBase+"/"+Key.split(":")[1]+Key.split(":")[2]+".csv"

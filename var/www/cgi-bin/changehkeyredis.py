@@ -181,9 +181,10 @@ if (flt.Decode(MyDB.type(RedisKey)) == "hash" and MyDB.exists(RedisKey) and MyDB
 	print ("</td>")
 	print ("<td>")
 	if MyDB.hexists(RedisKey,"ValoreMin"):
-		print (mhl.MyNumberForm("ValoreMin",flt.Decode(MyDB.hget(RedisKey,"ValoreMin")),"6","6","-99","99","0.001","",""))   # Non richiesto
+		#                        Name,      Value,                             Size,Maxlenght,Min,Max,Step,Required,Readonly
+		print (mhl.MyNumberForm("ValoreMin",flt.Decode(MyDB.hget(RedisKey,"ValoreMin")),"10","10","-1023","1023","0.001","",""))   # Non richiesto
 	else:
-		print (mhl.MyNumberForm("ValoreMin","","6","6","-99","99","0.001","",""))   # Non richiesto
+		print (mhl.MyNumberForm("ValoreMin","","10","10","-1023","1023","0.001","",""))   # Non richiesto
 	print ("</td>")
 	print ("</tr>")
 	
@@ -193,9 +194,9 @@ if (flt.Decode(MyDB.type(RedisKey)) == "hash" and MyDB.exists(RedisKey) and MyDB
 	print ("</td>")
 	print ("<td>")
 	if MyDB.hexists(RedisKey,"ValoreMax"):
-		print (mhl.MyNumberForm("ValoreMax",flt.Decode(MyDB.hget(RedisKey,"ValoreMax")),"6","6","0","99","0.001","",""))   # Non richiesto
+		print (mhl.MyNumberForm("ValoreMax",flt.Decode(MyDB.hget(RedisKey,"ValoreMax")),"10","10","-1023","1023","0.001","",""))   # Non richiesto
 	else:
-		print (mhl.MyNumberForm("ValoreMax","","6","6","0","99","0.001","",""))   # Non richiesto
+		print (mhl.MyNumberForm("ValoreMax","","10","10","-1023","1023","0.001","",""))   # Non richiesto
 	print ("</td>")
 	print ("</tr>")
 	

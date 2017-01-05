@@ -55,7 +55,7 @@ Non e` possibile modificare il nome della chiave (ovviamente).
 	<li>Inserire una breve descrizione, utile per ricordarselo meglio</li>
   </ul>
 
-<li>Timer</li>
+<li>Timer (secondi)</li>
   <ul>
 	<li>Tempo di campionamento per i grafici</li>
   </ul>
@@ -125,8 +125,11 @@ if (flt.Decode(MyDB.type(RedisKey)) == "hash" and MyDB.exists(RedisKey) and MyDB
 	print ("Timer:")
 	print ("</td>")
 	print ("<td>")
-	print (mhl.MyNumberForm("Timer",flt.Decode(MyDB.hget(RedisKey,"Timer")),"2","2","1","60","1","required",""))
+	#												Name,Value,Size,Maxlenght,Min,Max,Step,Required,Readonly
+	print (mhl.MyNumberForm("Timer",flt.Decode(MyDB.hget(RedisKey,"Timer")),"4","4","1","","1","required",""))
+	print ("secondi")
 	print ("</td>")
+	print ("secondi")
 	print ("</tr>")
 	
 	print ("<tr>")

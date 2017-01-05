@@ -64,9 +64,9 @@ else:
 				MyDB.sadd(RedisKey,j)
 			# Aggiungo la chiave con la configurazione
 			if RedisKey.split(":")[1] == 'graph' and not MyDB.exists(RedisKey+":Config"):
-				MyDB.hset(RedisKey+":Config","Timer", "5")
+				MyDB.hset(RedisKey+":Config","Timer", "300")
 			if RedisKey.split(":")[1] == 'alarms' and not MyDB.exists(RedisKey+":Config"):
-				MyDB.hset(RedisKey+":Config","Timer", "5")
+				MyDB.hset(RedisKey+":Config","Timer", "300")
 				MyDB.hset(RedisKey+":Config","Funzionamento","Off")
 		elif i == "del":
 			# Ho usato lo stesso nome per piu` selezioni, quindi ...

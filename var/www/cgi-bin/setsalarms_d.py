@@ -48,8 +48,10 @@ if len(sys.argv) != 2 or sys.argv[1] == "-h":
 	print ("\n\tUso: {0:s} <RedisKey>".format(sys.argv[0]))
 	print ("""
 Questo programma prende una chiave Redis di gruppo (sets),
-la elabora,
-e ?
+normalmente "sets:alarm:<nome>", la elabora, invia gli
+allarmi e/o avvisi all'utente tramite il centralino
+(centred).
+Altro ?
 """)
 
 
@@ -88,9 +90,12 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 	# Finche` esistono le "chiavi" (sensore e valori)
 	while MyDB.exists(Key) and MyDB.exists(Key+":Config"):
 		NowInMinute=int(time.strftime("%H",time.localtime()))*60+int(time.strftime("%M",time.localtime()))
-		#print ("Dalle:", KeySumDalle, "Now:", NowInMinute, "Alle:", KeySumAlle)	# myDebug
+		print ("Dalle:", KeySumDalle, "Now:", NowInMinute, "Alle:", KeySumAlle)	# myDebug
 		#time.sleep(3)	# MyDebug
-		if KeyFunction == "On" or ( KeyFunction == "Auto" and ( KeySumDalle <= NowInMinute <= KeySumAlle ) ) :
+		if KeyFunction == "On" or ( KeyFunction == "Auto" and \
+				(( KeySumDalle < KeySumAlle ) and ( KeySumDalle <= NowInMinute <= KeySumAlle )) or \
+				(( KeySumDalle > KeySumAlle ) and (( KeySumDalle <= NowInMinute ) or (NowInMinute <= KeySumAlle ))) ) :
+			print ("Sono entrato nella gestione allarmi")	# CANCELLARE
 			for i in range (len(KeySort)):
 				# Devo prendere l'ultimo ":Valori" dalla chiave (nella chiave, e` un gruppo "sets")
 				# ma solo dopo la virgola 		.split(",")[1]
@@ -117,7 +122,7 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 						flt.InviaAvviso(MyDB,"msg:level1:RitardoLettura:"+flt.AlertsID()[0],"alert",Descrizione+", in ritardo lettura/aggiornamento valore (vedi data)",Valore,UM,DataValore)
 						MyDB.hset(KeySort[i]+":Allarmi","RitardoLettura","Ritardo")
 						MyDB.expire(KeySort[i]+":Allarmi","3600")	# Questo e` l'unico che metto a 1 ora fissa.
-				""""
+				"""
 				
 				# CI STO` PENSANDO .. mettere qui i default, ma se li metto qui,
 				# vengono ricalcolati ogni volta, se faccio una funzione,
@@ -132,7 +137,9 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 				if MyDB.hexists(KeySort[i],"UM"):
 					UM=flt.Decode(MyDB.hget(KeySort[i],"UM"))
 				"""
-				
+				""" RANGEVALORI
+					Dev'essere nel formato [+/-]numero,[+/-]numero
+				"""
 				# Se esiste RangeValori, e il valore non rientra nel range, e non esiste allarme attivo da tempoX .. parte un nuovo allarme.
 				if MyDB.hexists(KeySort[i],"RangeValori"):
 					# Ho dovuto leggere il range e metterlo in una stringa ..
@@ -142,8 +149,8 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 					if float(Valore) < float(STRING.split(",")[0]) or float(Valore) > float(STRING.split(",")[1]):
 						if not MyDB.hexists(KeySort[i]+":Allarmi","RangeValori"):
 							print (STRING.split(",")[0],Valore,STRING.split(",")[1])
-							print(type(STRING.split(",")[0]))
-							print(type(Valore))
+							print (type(STRING.split(",")[0]))
+							print (type(Valore))
 							# Preparo i "default" nel caso non siano stati configurati
 							Descrizione="Manca descrizione"
 							if MyDB.hexists(KeySort[i],"Descrizione"):
@@ -219,5 +226,5 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 		elif KeyFunction == "Off" :
 			print ("Funzionamento : Off")
 			exit()
-	else:
-		print ("""       Mancano dei parametri, oppure la chiave specificata non esiste         """)
+else:
+	print ("""       Mancano dei parametri, oppure la chiave specificata non esiste         """)
