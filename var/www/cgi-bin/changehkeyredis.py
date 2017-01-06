@@ -79,12 +79,12 @@ print ("""
 
 <li>ValoreOn</li>
   <ul>
-	<li>Solitamente "1", ma potrebbe trattarsi di un sensore negato, in qual caso "0", oppure la soglia di un segnale analogico ...</li>
+	<li>Solitamente "1", ma potrebbe trattarsi di un sensore negato, in qual caso "0"</li>
   </ul>
 
 <li>Allarme</li>
   <ul>
-	<li>Se si tratta di sensore di allarme, "1" o "0", altrimenti "40" per un sonda di temperatura (per esempio), ...</li>
+	<li>Definisce qui valori che sono presi come allarme, per esempio: ValoreOn,ValoreMin</li>
   </ul>
 
 </ul>
