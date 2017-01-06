@@ -64,7 +64,7 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 	if MyDB.hexists(Key+":Config","Funzionamento"):
 		KeyFunction=flt.Decode(MyDB.hget(Key+":Config","Funzionamento"))
 	Timer=int(flt.Decode(MyDB.hget(Key+":Config","Timer")))			# Mi serve in secondi e lo manterrei per memoria allarme avevo messo *60, ma e` gia` in secondi
-	#TimerInizio=int(time.time())				# Tempo attuale meno Timer, cosi` il ciclo inizia subito
+	ExpireTimer=3600	# Metto un'ora, ma forse sarebbe meglio averlo nelle impostazioni
 	time.sleep(3)	# Ritardo attivazione, forse sarebbe meglio parametrizzare anche questo ?
 	
 	# Metto a 0 se non sono indicati "dalle" "alle" in configurazione
@@ -101,6 +101,27 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 				# ma solo dopo la virgola 		.split(",")[1]
 				# perche` prima c'e` la data		.split(",")[0]
 				Valore=flt.Decode(MyDB.lindex(KeySort[i]+":Valori",-1)).split(",")[1]
+				
+				""" Gestione degli avvisi/allarmi
+					Decido se deve essere inviato come allarme o come avviso
+					Vale per le variabili Valore On,Min,Max
+					
+					Lo .split(",") finale, genera una lista
+				"""
+				Allarmi=flt.Decode(MyDB.hget(KeySort[i],"Allarme")).split(",")
+				#print("Allarmi", Allarmi)
+				TypeValoreOn="alert"
+				TypeValoreMin="alert"
+				TypeValoreMax="alert"
+				for j in range (len(Allarmi)):
+					if Allarmi[j] == "ValoreOn":
+						TypeValoreOn="alarm"
+					if Allarmi[j] == "ValoreMin":
+						TypeValoreMin="alarm"
+					if Allarmi[j] == "ValoreMax":
+						TypeValoreMax="alarm"
+				print("TypeVal On, Min, Max:", TypeValoreOn, TypeValoreMin, TypeValoreMax)
+				
 				"""
 				if not MyDB.hexists(KeySort[i]+":Allarmi","DataValore"):
 					# .. mi serve anche la data per un nuovo avviso di probabile guasto al 'remote'
@@ -161,7 +182,7 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 							# InviaAvviso(DB,MsgID,Type,Desc,Value,UM,Date):
 							flt.InviaAvviso(MyDB,"msg:level1:RangeValori:"+flt.AlertsID()[0],"alert","Errore range valori "+Descrizione,Valore+"/"+flt.Decode(MyDB.hget(KeySort[i],"RangeValori")),UM,flt.AlertsID()[1])
 							MyDB.hset(KeySort[i]+":Allarmi","RangeValori","Alarm")
-							MyDB.expire(KeySort[i]+":Allarmi",Timer)
+							MyDB.expire(KeySort[i]+":Allarmi",ExpireTimer)
 				if MyDB.hexists(KeySort[i],"ValoreMin"):
 					if float(Valore) < float(flt.Decode(MyDB.hget(KeySort[i],"ValoreMin"))):
 						if not MyDB.hexists(KeySort[i]+":Allarmi","ValoreMin"):
@@ -173,9 +194,9 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 							if MyDB.hexists(KeySort[i],"UM"):
 								UM=flt.Decode(MyDB.hget(KeySort[i],"UM"))
 							# InviaAvviso(DB,MsgID,Type,Desc,Value,UM,Date):
-							flt.InviaAvviso(MyDB,"msg:level1:ValoreMin:"+flt.AlertsID()[0],"alert","Errore valore minimo "+Descrizione,Valore+"/"+flt.Decode(MyDB.hget(KeySort[i],"ValoreMin")),UM,flt.AlertsID()[1])
+							flt.InviaAvviso(MyDB,"msg:level1:ValoreMin:"+flt.AlertsID()[0],TypeValoreMin,"Errore valore minimo "+Descrizione,Valore+"/"+flt.Decode(MyDB.hget(KeySort[i],"ValoreMin")),UM,flt.AlertsID()[1])
 							MyDB.hset(KeySort[i]+":Allarmi","ValoreMin","Alarm")
-							MyDB.expire(KeySort[i]+":Allarmi",Timer)
+							MyDB.expire(KeySort[i]+":Allarmi",ExpireTimer)
 				if MyDB.hexists(KeySort[i],"ValoreMax"):
 					if float(Valore) > float(flt.Decode(MyDB.hget(KeySort[i],"ValoreMax"))):
 						if not MyDB.hexists(KeySort[i]+":Allarmi","ValoreMax"):
@@ -187,9 +208,9 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 							if MyDB.hexists(KeySort[i],"UM"):
 								UM=flt.Decode(MyDB.hget(KeySort[i],"UM"))
 							# InviaAvviso(DB,MsgID,Type,Desc,Value,UM,Date):
-							flt.InviaAvviso(MyDB,"msg:level1:ValoreMax:"+flt.AlertsID()[0],"alert","Errore valore massimo "+Descrizione,Valore+"/"+flt.Decode(MyDB.hget(KeySort[i],"ValoreMax")),UM,flt.AlertsID()[1])
+							flt.InviaAvviso(MyDB,"msg:level1:ValoreMax:"+flt.AlertsID()[0],TypeValoreMax,"Errore valore massimo "+Descrizione,Valore+"/"+flt.Decode(MyDB.hget(KeySort[i],"ValoreMax")),UM,flt.AlertsID()[1])
 							MyDB.hset(KeySort[i]+":Allarmi","ValoreMax","Alarm")
-							MyDB.expire(KeySort[i]+":Allarmi",Timer)
+							MyDB.expire(KeySort[i]+":Allarmi",ExpireTimer)
 				if MyDB.hexists(KeySort[i],"ValoreOn"):
 					if Valore == flt.Decode(MyDB.hget(KeySort[i],"ValoreOn")):
 						if not MyDB.hexists(KeySort[i]+":Allarmi","ValoreOn"):
@@ -201,28 +222,9 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 							if MyDB.hexists(KeySort[i],"UM"):
 								UM=flt.Decode(MyDB.hget(KeySort[i],"UM"))
 							# InviaAvviso(DB,MsgID,Type,Desc,Value,UM,Date):
-							flt.InviaAvviso(MyDB,"msg:level1:ValoreOn:"+flt.AlertsID()[0],"alert","Allarme "+Descrizione,Valore+"/"+flt.Decode(MyDB.hget(KeySort[i],"ValoreOn")),UM,flt.AlertsID()[1])
+							flt.InviaAvviso(MyDB,"msg:level1:ValoreOn:"+flt.AlertsID()[0],TypeValoreOn,"Allarme "+Descrizione,Valore+"/"+flt.Decode(MyDB.hget(KeySort[i],"ValoreOn")),UM,flt.AlertsID()[1])
 							MyDB.hset(KeySort[i]+":Allarmi","ValoreOn","Alarm")
-							MyDB.expire(KeySort[i]+":Allarmi",Timer)
-				# PROBLEMA !!! questo controllo finale non va bene, meglio che tutti gli allarmi/avvisi abbiano
-				# compilato il campo ValoreOn.
-				# *** Quindi questa roba e` da toglire/sostituire con "Allarme", che e` ancora tutto da decidere
-				else:
-					# Qua potrei avere dei problemi con le sonde di temperatura che misurano "1"
-					# A meno che: alle sonde di temperatura non venga messo un "ValoreOn" a "-40" per esempio.
-					if Valore == "1":
-						if not MyDB.hexists(KeySort[i]+":Allarmi","Valore"):
-							# Preparo i "default" nel caso non siano stati configurati
-							Descrizione="Manca descrizione"
-							if MyDB.hexists(KeySort[i],"Descrizione"):
-								Descrizione=flt.Decode(MyDB.hget(KeySort[i],"Descrizione"))
-							UM=""
-							if MyDB.hexists(KeySort[i],"UM"):
-								UM=flt.Decode(MyDB.hget(KeySort[i],"UM"))
-							# InviaAvviso(DB,MsgID,Type,Desc,Value,UM,Date):
-							flt.InviaAvviso(MyDB,"msg:level1:Valore:"+flt.AlertsID()[0],"alert","Allarme "+Descrizione,Valore,UM,flt.AlertsID()[1])
-							MyDB.hset(KeySort[i]+":Allarmi","Valore","Alarm")
-							MyDB.expire(KeySort[i]+":Allarmi",Timer)
+							MyDB.expire(KeySort[i]+":Allarmi",ExpireTimer)
 		elif KeyFunction == "Off" :
 			print ("Funzionamento : Off")
 			exit()
