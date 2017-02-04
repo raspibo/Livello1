@@ -59,9 +59,6 @@ Non e` possibile modificare il nome della chiave (ovviamente).
   <ul>
 	<li>Tempo di campionamento per i grafici</li>
   </ul>
-  <ul>
-	<li>Tempo di memoria del medesimo allarme, prima di un successivo riconoscimento ed invio</li>
-  </ul>
 
 <li>Funzionamento</li>
   <ul>

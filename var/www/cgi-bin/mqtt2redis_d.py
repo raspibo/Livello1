@@ -39,7 +39,8 @@ DirBase="/var/www/"
 ConfigFile=DirBase+"conf/config.json"
 
 # File di log
-FileName=DirBase+"file_di.log"
+#FileName=DirBase+"file_di.log"
+FileName="/tmp/file_di.log"
 # Lo cancello se esiste (ogni volta che avvio il programma)
 if os.path.isfile(FileName):
     print (".. deleting logfile ..")
@@ -108,12 +109,14 @@ def on_message(client, userdata, msg):
     except:
         AddFileData(FileName,DataCSV+":\t"+msg.topic+" "+str(msg.payload)+"\n")				# Scrivo l'errore nel file di log
         var = ""
+    print ("var =", var)
     if var != "":
         #print (var["ID"])
         MyDB = flt.OpenDBFile(ConfigFile)	# Apro il database Redis
         # Scrivo il record ("chiave redis") ed il valore
         IDHASH=TipoIO+":"+PosizioneC+":"+PosizioneP+":"+PosizioneS+":"+Tipo+":"+var["ID"]	# Uso una variabile di appoggio per l'identificatore della chiave "primaria"
         MyDB.hset(IDHASH, "Valori", IDHASH+":Valori" )										# La seconda chiave e` uguale alla prima con ":Valori" alla fine
+        print("IDHASH:",IDHASH)
         # Lista dei valori, contiene "Data,Valore" e si chiama (quasi) come sopra
         MyDB.rpush(IDHASH+":Valori",DataCSV+","+var["Valore"])
 

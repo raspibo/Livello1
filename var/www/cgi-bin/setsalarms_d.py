@@ -70,6 +70,7 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 		         al momento non necessita perche` non ci sono manuali.
 	"""
 	Timer=int(flt.Decode(MyDB.hget(Key+":Config","Timer")))		# Mi serve in secondi e lo manterrei per memoria allarme avevo messo *60, ma e` gia` in secondi
+	#######################################################		# Non e` utilizzato.
 	ExpireTimer=14400	# Fisso a N ora/e (e` in secondi), meglio averlo nelle impostazioni ?
 	time.sleep(3)	# Ritardo attivazione, forse sarebbe meglio parametrizzare anche questo ?
 	
