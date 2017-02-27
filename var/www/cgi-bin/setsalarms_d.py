@@ -147,19 +147,18 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 					
 					Lo .split(",") finale, genera una lista
 				"""
-				Allarmi=flt.Decode(MyDB.hget(KeySort[i],"Allarme")).split(",")
-				#print("Allarmi", Allarmi)
 				TypeValoreOn="alert"
 				TypeValoreMin="alert"
 				TypeValoreMax="alert"
-				for j in range (len(Allarmi)):
-					if Allarmi[j] == "ValoreOn":
-						TypeValoreOn="alarm"
-					if Allarmi[j] == "ValoreMin":
-						TypeValoreMin="alarm"
-					if Allarmi[j] == "ValoreMax":
-						TypeValoreMax="alarm"
-				#print("TypeVal On, Min, Max:", TypeValoreOn, TypeValoreMin, TypeValoreMax) # myDebug
+				if MyDB.hexists(KeySort[i],"Allarme"):
+					Allarmi=flt.Decode(MyDB.hget(KeySort[i],"Allarme")).split(",")
+					for j in range (len(Allarmi)):
+						if Allarmi[j] == "ValoreOn":
+							TypeValoreOn="alarm"
+						if Allarmi[j] == "ValoreMin":
+							TypeValoreMin="alarm"
+						if Allarmi[j] == "ValoreMax":
+							TypeValoreMax="alarm"
 				
 				"""
 				CREDO CHE QUESTO SARA` UN NUOVO "setsalarmsqualchecosa_d.py"
