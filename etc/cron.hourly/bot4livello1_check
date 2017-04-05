@@ -1,0 +1,25 @@
+#! /bin/sh
+### mqtt2redis_check.sh
+# Ho creato questo script per controllare che mqtt2redis_d.py
+# rimanga in esecuzione, anche in caso di errore/i di
+# programmazione che blocca/no il programma insapettatamente.
+### END INFO
+
+#DIR=/var/www/cgi-bin
+DAEMON_NAME=bot4livello1
+
+
+PID=`ps -e -o pid,cmd | grep "$DAEMON_NAME[.]py" | awk '{ print $1 }'`
+if [ "$PID" != "" ]
+    then
+        echo "$DAEMON_NAME is running!"
+        echo "Pid is: $PID"
+    else
+        echo "$DAEMON_NAME not running!"
+		DIRC=`pwd`
+		cd /home/pi/project/csv2image2telegram
+		su pi -c "python3 bot4livello1.py &"
+		# .. e un messaggio a centred quando si [ri]avvia
+		redis-cli -h centred hmset msg:alert:level1:$(date +\%Y\%m\%d\%H\%M\%S) type "alert" desc "bot4livello1.py in errore, tentativo di riavvio demone" value "on" um "" date "$(date +\%Y/\%m/\%d\ \%H:\%M:\%S)"
+		cd $DIRC
+fi

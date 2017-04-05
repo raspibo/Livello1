@@ -90,6 +90,7 @@ def on_message(client, userdata, msg):
     #print(msg.topic+" "+str(msg.payload))	# MyDebug
     # Preparazione delle variabili per generazione chiave Redis
     var = msg.topic
+    print ("*** Topic:",var)
     Tipo = os.path.basename(var)
     var = os.path.split(var)[0]
     PosizioneS = os.path.basename(var)
@@ -117,6 +118,7 @@ def on_message(client, userdata, msg):
         IDHASH=TipoIO+":"+PosizioneC+":"+PosizioneP+":"+PosizioneS+":"+Tipo+":"+var["ID"]	# Uso una variabile di appoggio per l'identificatore della chiave "primaria"
         MyDB.hset(IDHASH, "Valori", IDHASH+":Valori" )										# La seconda chiave e` uguale alla prima con ":Valori" alla fine
         print("IDHASH:",IDHASH)
+        print("Data:",DataCSV)
         # Lista dei valori, contiene "Data,Valore" e si chiama (quasi) come sopra
         MyDB.rpush(IDHASH+":Valori",DataCSV+","+var["Valore"])
 

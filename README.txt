@@ -16,3 +16,4 @@ Comandi usati per copia su repository git:
   cp -varpu --parents /etc/rc.local .
   cp -varpu --parents /etc/systemd/system/rc-local.service .
   cp -varpu --parents /etc/cron.hourly/mqtt2redis_check .
+  cp -varpu --parents /etc/cron.hourly/bot4livello1_check .
