@@ -43,7 +43,7 @@ ConfigFile=DirBase+"conf/config.json"
 FileName="/tmp/file_di.log"
 # Lo cancello se esiste (ogni volta che avvio il programma)
 if os.path.isfile(FileName):
-    print (".. deleting logfile ..")
+    #print (".. deleting logfile ..")
     os.remove(FileName)								# Elimino il file se esiste
 
 # Scrive un file
@@ -75,7 +75,8 @@ if not os.path.isfile(FileName):
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, rc):
-    print("Connected with result code "+str(rc))
+    #print("Connected with result code "+str(rc))
+    AddFileData(FileName,"Connected with result code "+str(rc)+"\n")    # Scrivo nel file di log
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
     client.subscribe("I/+/+/+/+")
@@ -90,7 +91,8 @@ def on_message(client, userdata, msg):
     #print(msg.topic+" "+str(msg.payload))	# MyDebug
     # Preparazione delle variabili per generazione chiave Redis
     var = msg.topic
-    print ("*** Topic:",var)
+    #print ("*** Topic:",var)
+    #AddFileData(FileName,"*** Topic:"+str(var)+"\n")    # Scrivo nel file di log
     Tipo = os.path.basename(var)
     var = os.path.split(var)[0]
     PosizioneS = os.path.basename(var)
@@ -111,15 +113,20 @@ def on_message(client, userdata, msg):
         AddFileData(FileName,DataCSV+":\t"+msg.topic+" "+str(msg.payload)+"\n")				# Scrivo l'errore nel file di log
         var = ""
     print ("var =", var)
-    if var != "":
-        #print (var["ID"])
+    #AddFileData(FileName,"var ="+str(var)+"\n")    # Scrivo nel file di log
+    # Cambio il controllo causa "KeyError: var"
+    if "ID" in var and "Valore" in var:
+        #print(var)
         MyDB = flt.OpenDBFile(ConfigFile)	# Apro il database Redis
         # Scrivo il record ("chiave redis") ed il valore
         IDHASH=TipoIO+":"+PosizioneC+":"+PosizioneP+":"+PosizioneS+":"+Tipo+":"+var["ID"]	# Uso una variabile di appoggio per l'identificatore della chiave "primaria"
         MyDB.hset(IDHASH, "Valori", IDHASH+":Valori" )										# La seconda chiave e` uguale alla prima con ":Valori" alla fine
-        print("IDHASH:",IDHASH)
-        print("Data:",DataCSV)
+        #print("IDHASH:",IDHASH)
+        #AddFileData(FileName,"IDHASH:"+str(IDHASH)+"\n")    # Scrivo nel file di log
+        #print("Data:",DataCSV)
+        #AddFileData(FileName,"Data:"+str(DataCSV)+"\n")    # Scrivo nel file di log
         # Lista dei valori, contiene "Data,Valore" e si chiama (quasi) come sopra
+        # Inserisco il valore solo se esiste # Questo dovrebbe eliminare alcuni errori che capitano
         MyDB.rpush(IDHASH+":Valori",DataCSV+","+var["Valore"])
 
 client = mqtt.Client()
