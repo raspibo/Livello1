@@ -8,7 +8,21 @@ Per l'avvio del "/etc/rc.local" con il "systemd" ho dovuto metter mano a qualche
 impostazione, mi sono wscritto tutto qua: http://trance.myftp.org/3ns/content/etcrclocal-systemd
 
 
-MEMO:
+MEMO's:
+
+Programmi installati (necessari, utili e inutili):
+  apt-file
+  mc
+  redis-server
+  redis-tools
+  python3-redis
+  mosquitto
+  paho-mqtt
+  nginx
+  fcgiwrap
+  git
+  ssl-cert (che poi non ho riconfigurato)
+  php5-fpm (serve a  dokuwiki ?)
 
 Comandi usati per copia su repository git:
   cp -varpu --parents /var/www/ .
