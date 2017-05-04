@@ -5,7 +5,11 @@ Per il file "/var/www/dygraph-combined.js", fate riferimento al sito web: http:/
 (https://github.com/danvk/dygraphs/blob/master/LICENSE.txt)
 
 Per l'avvio del "/etc/rc.local" con il "systemd" ho dovuto metter mano a qualche
-impostazione, mi sono wscritto tutto qua: http://trance.myftp.org/3ns/content/etcrclocal-systemd
+impostazione, mi sono scritto tutto qua: http://trance.myftp.org/3ns/content/etcrclocal-systemd
+
+Se installete/utilizzate anche il bot per Telegram (https://github.com/raspibo/bot4livello1),
+copiatelo nella directory che preferite, e modificate il file /etc/cron.hourly/bot4livello1_check,
+dove c'e` il (change directory) "cd /home/pi/projects/csv2image2telegram", mettete il vostro percorso.
 
 
 MEMO's:
