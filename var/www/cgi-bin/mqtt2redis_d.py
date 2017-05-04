@@ -112,7 +112,7 @@ def on_message(client, userdata, msg):
     except:
         AddFileData(FileName,DataCSV+":\t"+msg.topic+" "+str(msg.payload)+"\n")				# Scrivo l'errore nel file di log
         var = ""
-    print ("var =", var)
+    #print ("var =", var)
     #AddFileData(FileName,"var ="+str(var)+"\n")    # Scrivo nel file di log
     # Cambio il controllo causa "KeyError: var"
     if "ID" in var and "Valore" in var:
