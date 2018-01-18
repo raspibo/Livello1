@@ -62,7 +62,7 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 	# Ho usato il secondo e terzo valore (sets:NOME:ID), perche potrebbero esserci dei duplicati fra allarmi e grafici e .. altro (se ci sara`)
 	FileName=DirBase+"/"+Key.split(":")[1]+Key.split(":")[2]+".csv"
 	if os.path.isfile(FileName):
-		print ("Delete")
+		#print ("Delete")
 		os.remove(FileName)								# Elimino il file se esiste
 	
 	while True:

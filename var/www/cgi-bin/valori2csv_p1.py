@@ -60,7 +60,8 @@ if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
 	for i in range (MyDB.llen(Key)):
 		ValoriCSV=flt.Decode(MyDB.lindex(Key,i))
 		flt.AddFileData(FileName,ValoriCSV+"\n")
-		print (".",end="")
+#		print (".",end="")
+	#print(MyDB.lrange(Key,0,-1))
 	print (" end.")
 elif not MyDB.exists(sys.argv[1]):
 	print ("Chiave inesistente", sys.argv[1])

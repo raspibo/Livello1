@@ -27,7 +27,8 @@ if [ $PID ]
 		echo "Actual PID is: $PID"
 	else
 		echo "Avvio \"mqtt2redis_d\""
-		/var/www/cgi-bin/mqtt2redis_init.d.sh start
+		#/var/www/cgi-bin/mqtt2redis_init.d.sh start # 20180115
+        su -c "/var/www/cgi-bin/mqtt2redis_init.d.sh start" pi
 		# .. e un messaggio a centred quando si [ri]avvia
 		redis-cli -h centred hmset msg:alert:level1:$(date +\%Y\%m\%d\%H\%M\%S) type "alert" desc "Centralina level 1 [ri]avviata .." value "on" um "" date "$(date +\%Y/\%m/\%d\ \%H:\%M:\%S)"
 fi
