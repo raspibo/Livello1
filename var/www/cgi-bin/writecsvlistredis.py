@@ -46,9 +46,11 @@ if FormName not in form:
 	print ("<h2>ERRORE: Non e` stata passata la chiave Redis</h2>")
 else:
 	RedisKey = cgi.escape(form[FormName].value)
+	RedisKeyStart = cgi.escape(form["VStart"].value)
+	RedisKeyStop = cgi.escape(form["VStop"].value)
 	print ("La chiave viene passata come argomento ad un'altro programma, quindi l'unico feedback possibile e` 0 se e` andato a buon fine, o 1 se c'e` stato un'errore.</br></br>")
-	print ("Comando eseguito:</br>/var/www/cgi-bin/valori2csv_p1.py {0:s}</br></br>".format(RedisKey))
-	print (subprocess.call(['/var/www/cgi-bin/valori2csv_p1.py', RedisKey]))
+	print ("Comando eseguito:</br>/var/www/cgi-bin/valori2csv.py {0:s} {1:s} {2:s}</br></br>".format(RedisKey, RedisKeyStart, RedisKeyStop))
+	print (subprocess.call(['/var/www/cgi-bin/valori2csv.py', RedisKey, RedisKeyStart, RedisKeyStop]))
 
 # End web page
 print (mhl.MyHtmlBottom())

@@ -144,7 +144,7 @@ if (flt.Decode(MyDB.type(RedisKey)) == "list" and MyDB.exists(RedisKey)):
 		print (mhl.MyActionForm("/cgi-bin/writecsvlistredis.py","POST"))
 		print ("<tr>")
 		print ("<td colspan=\"2\">")
-		print ("<b>Attenzione:</b> se la quantita` dei valori e` eccessiva, il file viene generato incompleto e compare un'errore del web server.</br>")
+		print ("<b>Attenzione:</b> se la quantita` dei valori e` eccessiva, compare un'errore del web server, che non funzionera` fino al termine della creazione del file, il tempo di attesa puo` essere notevole, anche piu` di un'ora, dipende dalla mole dei dati.</br>")
 		print ("</td>")
 		print ("</tr>")
 		
@@ -154,6 +154,30 @@ if (flt.Decode(MyDB.type(RedisKey)) == "list" and MyDB.exists(RedisKey)):
 		print ("</td>")
 		print ("<td>")
 		print (mhl.MyTextForm(FormName,RedisKey,"40","required","readonly"))
+		print ("</td>")
+		print ("</tr>")
+		
+		print ("<tr>")
+		print ("<td>")
+		print ("Start:")
+		print ("</td>")
+		print ("<td>")
+		if MyDB.llen(RedisKey) >= 10000 :
+			start=MyDB.llen(RedisKey)-10000
+		else:
+			start=0
+		# def MyNumberForm(Name,Value,Size,Maxlenght,Min,Max,Step,Required,Readonly):
+		print (mhl.MyNumberForm("VStart",str(start),"","","0",str(MyDB.llen(RedisKey)-1),"1","required",""))
+		print ("</td>")
+		print ("</tr>")
+		
+		print ("<tr>")
+		print ("<td>")
+		print ("Stop:")
+		print ("</td>")
+		print ("<td>")
+		# def MyNumberForm(Name,Value,Size,Maxlenght,Min,Max,Step,Required,Readonly):
+		print (mhl.MyNumberForm("VStop",str(MyDB.llen(RedisKey)),"","","",str(MyDB.llen(RedisKey)),"1","required",""))
 		print ("</td>")
 		print ("</tr>")
 		
@@ -173,7 +197,7 @@ if (flt.Decode(MyDB.type(RedisKey)) == "list" and MyDB.exists(RedisKey)):
 		print (mhl.MyActionForm("/cgi-bin/writecsvlistsetsredis.py","POST"))
 		print ("<tr>")
 		print ("<td colspan=\"2\">")
-		print ("<b>Attenzione:</b> se la quantita` dei valori e` eccessiva, il file viene generato incompleto e compare un'errore del web server.</br>")
+		print ("<b>Attenzione:</b> se la quantita` dei valori e` eccessiva, compare un'errore del web server, che non funzionera` fino al termine della creazione del file, il tempo di attesa puo` essere notevole, anche piu` di un'ora, dipende dalla mole dei dati.</br>")
 		print ("</td>")
 		print ("</tr>")
 		
@@ -183,6 +207,30 @@ if (flt.Decode(MyDB.type(RedisKey)) == "list" and MyDB.exists(RedisKey)):
 		print ("</td>")
 		print ("<td>")
 		print (mhl.MyTextForm(FormName,RedisKey,"40","required","readonly"))
+		print ("</td>")
+		print ("</tr>")
+		
+		print ("<tr>")
+		print ("<td>")
+		print ("Start:")
+		print ("</td>")
+		print ("<td>")
+		if MyDB.llen(RedisKey) >= 10000 :
+			start=MyDB.llen(RedisKey)-10000
+		else:
+			start=0
+		# def MyNumberForm(Name,Value,Size,Maxlenght,Min,Max,Step,Required,Readonly):
+		print (mhl.MyNumberForm("VStart",str(start),"","","0",str(MyDB.llen(RedisKey)-1),"1","required",""))
+		print ("</td>")
+		print ("</tr>")
+		
+		print ("<tr>")
+		print ("<td>")
+		print ("Stop:")
+		print ("</td>")
+		print ("<td>")
+		# def MyNumberForm(Name,Value,Size,Maxlenght,Min,Max,Step,Required,Readonly):
+		print (mhl.MyNumberForm("VStop",str(MyDB.llen(RedisKey)),"","","",str(MyDB.llen(RedisKey)),"1","required",""))
 		print ("</td>")
 		print ("</tr>")
 		

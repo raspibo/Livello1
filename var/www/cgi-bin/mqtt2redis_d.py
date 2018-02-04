@@ -120,7 +120,7 @@ def on_message(client, userdata, msg):
         MyDB = flt.OpenDBFile(ConfigFile)	# Apro il database Redis
         # Scrivo il record ("chiave redis") ed il valore
         IDHASH=TipoIO+":"+PosizioneC+":"+PosizioneP+":"+PosizioneS+":"+Tipo+":"+var["ID"]	# Uso una variabile di appoggio per l'identificatore della chiave "primaria"
-        print("IDHASH:",IDHASH)
+        #print("IDHASH:",IDHASH)
         MyDB.hset(IDHASH, "Valori", IDHASH+":Valori" )										# La seconda chiave e` uguale alla prima con ":Valori" alla fine
         #print("IDHASH:",IDHASH)
         #AddFileData(FileName,"IDHASH:"+str(IDHASH)+"\n")    # Scrivo nel file di log

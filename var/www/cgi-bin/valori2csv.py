@@ -38,40 +38,32 @@ ConfigFile=DirBase+"/conf/config.json"
 MyDB = flt.OpenDBFile(ConfigFile)
 
 # Controllo se piu` di un argomento o se richiesto l'help
-if len(sys.argv) != 2 or sys.argv[1] == "-h":
-	print ("\n\tUso: %s <RedisKey>" % sys.argv[0])
-	print ("""
+if len(sys.argv) != 4 or sys.argv[1] == "-h":
+    print ("\n\tUso: %s <RedisKey> <Start> <Stop>" % sys.argv[0])
+    print ("""
 Questo programma prende una chiave Redis contenente i valori (*:Valori),
 elabora, e crea il file .csv
 """)
-	exit()
+    exit()
 
-if len(sys.argv) == 2 and MyDB.exists(sys.argv[1]):
-	# Setto le variabili per comodita` e chiarezza di programma
-	Key=sys.argv[1]
-	# Ho usato il secondo e terzo valore (sets:NOME:ID), perche potrebbero esserci dei duplicati fra allarmi e grafici e .. altro (se ci sara`)
-	FileName=DirBase+"/"+Key.split(":")[4]+Key.split(":")[5]+".csv"
-	if os.path.isfile(FileName):
-		os.remove(FileName)								# Elimino il file se esiste
-	
-	IntestazioneCSV="Data"
-	IntestazioneCSV=IntestazioneCSV+","+Key.split(":")[4]	# 4 e` il tipo (temperatura/pir/..)
-	flt.WriteFileData(FileName,IntestazioneCSV+"\n")								# New
-	for i in range (MyDB.llen(Key)):
-		ValoriCSV=flt.Decode(MyDB.lindex(Key,i))
-		flt.AddFileData(FileName,ValoriCSV+"\n")
-#		print (".",end="")
-	#print(MyDB.lrange(Key,0,-1))
-	print (" end.")
+if len(sys.argv) == 4 and MyDB.exists(sys.argv[1]):
+    # Setto le variabili per comodita` e chiarezza di programma
+    Key=sys.argv[1]
+    print ("Key: \t\t\t", Key)
+    # Ho usato il secondo e terzo valore (sets:NOME:ID), perche potrebbero esserci dei duplicati fra allarmi e grafici e .. altro (se ci sara`)
+    FileName=DirBase+"/"+Key.split(":")[4]+Key.split(":")[5]+".csv"
+    if os.path.isfile(FileName):
+        print ("Deleting: \t\t\"%s\"" % FileName)
+        os.remove(FileName)								# Elimino il file se esiste
+    IntestazioneCSV="Data"
+    IntestazioneCSV=IntestazioneCSV+","+Key.split(":")[4]	# 4 e` il tipo (temperatura/pir/..)
+    FileTemp = open(FileName,"w")
+    FileTemp.write(IntestazioneCSV+"\n")  # Scrittura intestazione
+    #for i in range (MyDB.llen(Key)):
+    for i in range(int(sys.argv[2]), int(sys.argv[3])):
+        ValoriCSV=flt.Decode(MyDB.lindex(Key,i))
+        FileTemp.write(ValoriCSV+"\n")
+    FileTemp.close()
+    print ("[re]Generated file: \t\"{}\"".format(FileName))
 elif not MyDB.exists(sys.argv[1]):
-	print ("Chiave inesistente", sys.argv[1])
-
-""" Debug
-print (Key)
-print (KeyVal)
-print (KeySort)
-print (FileName)
-print (IntestazioneCSV)
-#print (ValoriCSV)
-print (FileName)
-"""
+    print ("Chiave inesistente", sys.argv[1])
