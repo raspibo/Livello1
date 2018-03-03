@@ -23,8 +23,9 @@ SOFTWARE.
 
 """
 
-""" setsVals2csv.py
+""" setsVals2csv_search_date.py
     Prende i dati dalla chiave Redis (sets:*:Valori) passata come argomento all'avvio,
+    cerca fra i parametri si start e stop (data minore, data maggiore),
     elabora e ricrea il file .csv
 """
 
@@ -69,11 +70,10 @@ if len(sys.argv) == 4 and MyDB.exists(sys.argv[1]):
     FileTemp = open(FileName,"w")
     FileTemp.write(IntestazioneCSV+"\n")  # Scrittura intestazione
     # Per tutta la lunghezza della lista "Valori", li leggo e li scrivo nel file
-    #for i in range(MyDB.llen(KeyVal)):
-    for i in range(int(sys.argv[2]), int(sys.argv[3])):
-        #print (flt.Decode(MyDB.lindex(KeyVal,i)))
-        ValoriCSV=flt.Decode(MyDB.lindex(KeyVal,i))
-        FileTemp.write(ValoriCSV+"\n")
+    for i in range (MyDB.llen(KeyVal)):
+        ValoreCSV=flt.Decode(MyDB.lindex(KeyVal,i))
+        if sys.argv[2] < ValoreCSV < sys.argv[3] :
+            FileTemp.write(ValoreCSV+"\n")
     FileTemp.close()
     print ("[re]Generated file: \t\"{}\"".format(FileName))
 elif not MyDB.exists(sys.argv[1]):
