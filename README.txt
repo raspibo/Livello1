@@ -1,7 +1,7 @@
 Centralina livello 1
 ====================
 
-Per il file "/var/www/dygraph-combined.js", fate riferimento al sito web: http://dygraphs.com/
+Per il file "/var/www/dygraph.min.js", fate riferimento al sito web: http://dygraphs.com/
 (https://github.com/danvk/dygraphs/blob/master/LICENSE.txt)
 
 Se installete/utilizzate anche il bot per Telegram (https://github.com/raspibo/bot4livello1),
@@ -20,12 +20,14 @@ Programmi installati (necessari, utili e inutili):
   paho-mqtt
   ssl-cert
   php-fpm
+  php7.0-xml
   python3-pip
   python3-pandas
   paho-mqtt (pip3 install)
   python-telegram-bot (pip3 ")
   pygal (pip3 ")
   git
+  dokuwiki (manual install)
   apt-file
   mc
   redis-tools

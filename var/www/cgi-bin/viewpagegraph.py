@@ -52,7 +52,7 @@ print("""<!DOCTYPE html>
   <meta http-equiv="refresh" content="300">
 
 <script type="text/javascript"
-  src="../dygraph-combined.js"></script>
+  src="../dygraph.min.js"></script>
 </head>
 
 
