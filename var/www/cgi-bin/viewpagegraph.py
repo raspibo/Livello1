@@ -76,6 +76,7 @@ Con il tasto "Shift" premuto, usa il click del mouse per trascinare l'area di vi
 </p>
 
 <div id="graphdiv" style="position:absolute; left:20px; right:20px; top:200px; bottom:20px;"></div>
+<div id="legend" style="vertical-align:top; text-align:right; "></div>
 <script type="text/javascript">
   g = new Dygraph(
 
@@ -94,8 +95,9 @@ print("""
     //title: 'Grafico',
     ylabel: 'Value',
     xlabel: 'Time',
-    //legend: 'always',
-    labelDivStyles: {'textalign':'right'}
+    // Le due sotto sono nuove impostazioni per il nuovo dygraph (20180309)
+    labelsDiv: document.getElementById('legend'),
+    labelsSeparateLines: 'true',
     }
   );
 </script>

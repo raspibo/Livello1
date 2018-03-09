@@ -27,12 +27,15 @@ Programmi installati (necessari, utili e inutili):
   python-telegram-bot (pip3 ")
   pygal (pip3 ")
   git
+  mosquitto-clients
   dokuwiki (manual install)
   apt-file
   mc
   redis-tools
   aria2
 
+Comando per visualizzare i dati in arrivo MQTT (tutti i topic, dalla root):
+  mosquitto_sub -v -t \#
 
 Comandi usati per copia su repository git:
   cp -vapu --parents /var/www/ .
