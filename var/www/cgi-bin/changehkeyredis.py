@@ -65,26 +65,31 @@ print ("""
 <li>RangeValori</li>
   <ul>
 	<li>Dipende che cos'e`, se un digitale, puo` essere solamente "0" o "1", quindi indicare "0,1", altrimenti ...</li>
+	<li>Vengono emessi avvisi se il valore e` impostato</li>
   </ul>
 
 <li>ValoreMin</li>
   <ul>
 	<li>Dipende che cos'e`, se un digitale, puo` essere solamente "0", altrimenti ...</li>
+	<li>Vengono emessi avvisi se il valore e` impostato</li>
   </ul>
 
 <li>ValoreMax</li>
   <ul>
 	<li>Dipende che cos'e`, se un digitale, puo` essere solamente "1", altrimenti ...</li>
+	<li>Vengono emessi avvisi se il valore e` impostato</li>
   </ul>
 
 <li>ValoreOn</li>
   <ul>
 	<li>Solitamente "1", ma potrebbe trattarsi di un sensore negato, in qual caso "0"</li>
+	<li>Vengono emessi avvisi se il valore e` impostato</li>
   </ul>
 
 <li>Allarme</li>
   <ul>
-	<li>Definisce qui valori che sono presi come allarme, per esempio: ValoreOn,ValoreMin</li>
+	<li>Definre qui i valori che sono presi come allarme, per esempio: ValoreOn,ValoreMin</li>
+	<li>Se sono impostati, ma non indicati negli allarmi, sono emessi dei semplici avvisi</li>
   </ul>
 
 </ul>
