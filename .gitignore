@@ -68,3 +68,6 @@ target/
 #web
 .htpasswd
 .csv
+
+#web html installed default
+/var/www/html
