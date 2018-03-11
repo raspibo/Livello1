@@ -43,7 +43,6 @@ print ("<h1>","<center>",TestoPagina,"</center>","</h1>")
 # Eventuale help/annotazione
 print ("Non e` possibile modificare il nome della chiave (ovviamente), il valore e la data.<br/>")
 print ("Tutti gli altri, non sono parametri obbligatori (ad oggi).<br/>")
-print ("<b>Ad oggi non c'e` niente di \"ufficiale\", perche` non e` stata scritta una linea di codice :) .</b><br/>")
 print ("""
 <ul>
 
