@@ -91,6 +91,13 @@ print ("""
 	<li>Se sono impostati, ma non indicati negli allarmi, sono emessi dei semplici avvisi</li>
   </ul>
 
+<li>TempoErrore</li>
+  <ul>
+	<li>Usare per controllare che il dato arrivi</li>
+	<li>Utile per verificare corretto funzionamento del "remote" (potrebbe essersi bloccato, per esempio per mancanza di alimentazione)</li>
+  </ul>
+
+
 </ul>
 """)
 print ("<hr/>") # La linea orizzontale
@@ -225,6 +232,19 @@ if (flt.Decode(MyDB.type(RedisKey)) == "hash" and MyDB.exists(RedisKey) and MyDB
 		print (mhl.MyTextForm("Allarme",flt.Decode(MyDB.hget(RedisKey,"Allarme")),"20","",""))   # Non richiesto
 	else:
 		print (mhl.MyTextForm("Allarme","","20","",""))   # Non richiesto
+	print ("</td>")
+	print ("</tr>")
+	
+	print ("<tr>")
+	print ("<td>")
+	print ("TempoErrore:")
+	print ("</td>")
+	print ("<td>")
+	if MyDB.hexists(RedisKey,"TempoErrore"):
+		# def MyNumberForm(Name,Value,Size,Maxlenght,Min,Max,Step,Required,Readonly):
+		print (mhl.MyNumberForm("TempoErrore",flt.Decode(MyDB.hget(RedisKey,"TempoErrore")),"5","5","0","28800","60","",""))   # Non richiesto
+	else:
+		print (mhl.MyNumberForm("TempoErrore","","5","5","0","28800","60","",""))   # Non richiesto
 	print ("</td>")
 	print ("</tr>")
 	
