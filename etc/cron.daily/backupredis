@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cp /var/lib/redis/dump.rdb ~/dump.rdb.$(date +%u)

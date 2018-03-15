@@ -43,3 +43,4 @@ Comandi usati per copia su repository git:
   cp -vapu --parents /etc/rc.local .
   cp -vapu --parents /etc/cron.hourly/*_check .
   cp -vapu --parents /etc/cron.monthly/dokuwiki .
+  cp -vapu --parents /etc/cron.daily/backupredis .
