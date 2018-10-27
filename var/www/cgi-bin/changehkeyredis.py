@@ -93,6 +93,7 @@ print ("""
 
 <li>TempoErrore</li>
   <ul>
+	<li>E` espresso in secondi (es.: 1 ora = 3600, 2 ore = 7200)</li>
 	<li>Usare per controllare che il dato arrivi</li>
 	<li>Utile per verificare corretto funzionamento del "remote" (potrebbe essersi bloccato, per esempio per mancanza di alimentazione)</li>
   </ul>
