@@ -61,8 +61,42 @@ print ("""
 <p><b>Ricordati di salvare i dati che non vuoi perdere</b>
 (Mi riferisco in particolare ai .csv, perche` saranno sovrascritti).</p>
 """)
-print ("<br/>")	# Riga vuota / no linea orizzonatale
 
+# Aggiungo qui la visualizzazione dei demoni in funzione dall'ultima volta
+print ("""
+<p><b>Demoni in esecuzione nella precedente sessione</b>
+<br>ATTENZIONE: la lista si rigenera ogni volta si eseguono o fermano demoni!
+<br><b>Se necessario causa riavvio, salvare una copia della lista, perche`, come ho scritto sopra, si rigenera ad ogni star/stop.</b>
+<br>Questo elenco e` stato previsto come <b>memoria</b> in caso d'interruzione anomala e/o riavvio del computer.
+<br>Non e` stato previsto un'avvio automatico allo start del computer perche` avrebbe azzerato e sovrascritto i files ".csv" (grafici), quindi sono da salvare/copiare, se opportuno.
+""")
+print ("<fieldset>")
+print ("<legend>Daemons running now/or previous session - MEMORY</legend>")
+print ("<pre><b>")
+
+try:
+    f = open('/var/www/daemons_graphs_running.list', 'r')
+    fc = f.read()
+    print("- GRAPHS -")
+    print (fc)
+    f.close()
+except:
+    print ("Ancora nessuna memorizzazione, manca il file \"graphs\"")
+
+try:
+    f = open('/var/www/daemons_alarms_running.list', 'r')
+    fc = f.read()
+    print("- ALARMS -")
+    print (fc)
+    f.close()
+except:
+    print ("Ancora nessuna memorizzazione, manca il file \"alarms\"")
+
+print ("</b></pre>")
+print ("</p>")
+print ("</fieldset>")
+
+print ("<br/>")	# Riga vuota / no linea orizzonatale
 
 form=cgi.FieldStorage()
 

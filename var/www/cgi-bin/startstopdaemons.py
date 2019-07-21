@@ -59,6 +59,9 @@ for i in form.keys():
 	else:
 		print ("<h3>Cosa e` successo ? Questo e` il valore in form: </h3>",i)
 
+# Genero il file con i "daemons" in esecuzione, come promemoria
+os.system("ps -e -o cmd | grep sets:grap[h] > /var/www/daemons_graphs_running.list")
+
 
 # INDIETRO
 
