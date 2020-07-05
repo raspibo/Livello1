@@ -66,7 +66,7 @@ print ("""
 print ("""
 <p><b>Demoni in esecuzione nella precedente sessione</b>
 <br>ATTENZIONE: la lista si rigenera ogni volta si eseguono o fermano demoni!
-<br><b>Se necessario causa riavvio, salvare una copia della lista, perche`, come ho scritto sopra, si rigenera ad ogni star/stop.</b>
+<br><b>Se necessario causa riavvio, salvare una copia della lista, perche`, come ho scritto sopra, si rigenera ad ogni start/stop.</b>
 <br>Questo elenco e` stato previsto come <b>memoria</b> in caso d'interruzione anomala e/o riavvio del computer.
 <br>Non e` stato previsto un'avvio automatico allo start del computer perche` avrebbe azzerato e sovrascritto i files ".csv" (grafici), quindi sono da salvare/copiare, se opportuno.
 """)
