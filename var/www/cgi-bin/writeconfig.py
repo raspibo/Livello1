@@ -6,6 +6,7 @@
 # Serve per la parte di gestione html in python
 import cgi
 import cgitb
+import html
 
 # Abilita gli errori al server web/http
 cgitb.enable()
@@ -45,7 +46,7 @@ for i in range(len(ConfigNow)):
 			print("<br/>Errore:", ConfigNow[i]["name"])
 			Error = ConfigNow[i]["name"]
 	else:
-		ConfigNow[i]["value"] = cgi.escape(form[ConfigNow[i]["name"]].value)
+		ConfigNow[i]["value"] = html.escape(form[ConfigNow[i]["name"]].value)
 
 if Error == "":
 	ConfigNew=mjl.ReadJsonFile(ConfigFile)

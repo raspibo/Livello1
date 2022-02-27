@@ -5,6 +5,7 @@
 # Serve per la parte di gestione html in python
 import cgi
 import cgitb
+import html
 
 # Abilita gli errori al server web/http
 cgitb.enable()
@@ -33,7 +34,7 @@ form=cgi.FieldStorage()
 if FormName not in form:
 	pass
 else:
-	FileName = cgi.escape(form[FormName].value)
+	FileName = html.escape(form[FormName].value)
 
 TestoPagina = TestoPagina + FileName
 

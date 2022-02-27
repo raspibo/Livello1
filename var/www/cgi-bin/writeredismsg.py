@@ -6,6 +6,7 @@
 # Serve per la parte di gestione html in python
 import cgi
 import cgitb
+import html
 
 # Abilita gli errori al server web/http
 cgitb.enable()
@@ -48,7 +49,7 @@ for j in MyDB.hkeys(RedisKey):
         else:
             print ("<h3>Manca il valore: </h3>",i)
     else:
-        MyDB.hset(RedisKey,i,cgi.escape(form[i].value))
+        MyDB.hset(RedisKey,i,html.escape(form[i].value))
 
 print ("<h2>Dati inseriti/modificati:</h2>")
 print ("<br>")

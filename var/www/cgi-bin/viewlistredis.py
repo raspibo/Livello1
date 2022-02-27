@@ -7,6 +7,7 @@
 # Serve per la parte di gestione html in python
 import cgi
 import cgitb
+import html
 
 # Abilita gli errori al server web/http
 cgitb.enable()
@@ -45,7 +46,7 @@ form=cgi.FieldStorage()
 if FormName not in form:
 	print ("<h2>ERRORE: Non e` stata passata la chiave Redis</h2>")
 else:
-	RedisKey = cgi.escape(form[FormName].value)
+	RedisKey = html.escape(form[FormName].value)
 	#print (MyDB.lrange(RedisKey,"0","-1"))
 	for i in range (MyDB.llen(RedisKey)):
 		print (flt.Decode(MyDB.lindex(RedisKey,i)))

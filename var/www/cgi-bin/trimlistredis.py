@@ -7,6 +7,7 @@
 # Serve per la parte di gestione html in python
 import cgi
 import cgitb
+import html
 
 # Abilita gli errori al server web/http
 cgitb.enable()
@@ -49,7 +50,7 @@ elif "VStart" not in form:
 elif "VStop" not in form:
 	print ("<h3>Manca il valore: Stop</h3>")
 else:
-	RedisKey = cgi.escape(form[FormName].value)
+	RedisKey = html.escape(form[FormName].value)
 	print ("<b>Prima:</b>")
 	print ("<table>")   # 2 colonne
 	
@@ -96,8 +97,8 @@ else:
 	
 	print ("</table>")
 	
-	RedisKeyStart = cgi.escape(form["VStart"].value)
-	RedisKeyStop = cgi.escape(form["VStop"].value)
+	RedisKeyStart = html.escape(form["VStart"].value)
+	RedisKeyStop = html.escape(form["VStop"].value)
 	print ("</br></br> <b>Command</b>: ltrim {0:s} {1:s} {2:s} </br></br></br>".format(RedisKey,RedisKeyStart,RedisKeyStop))
 	if MyDB.ltrim(RedisKey,RedisKeyStart,RedisKeyStop):
 		print ("<b>Dopo:</b>")

@@ -5,6 +5,7 @@
 # Serve per la parte di gestione html in python
 import cgi
 import cgitb
+import html
 
 # Abilita gli errori al server web/http
 cgitb.enable()
@@ -50,7 +51,7 @@ form=cgi.FieldStorage()
 if FormName not in form:
 	pass
 else:
-	RedisKey = cgi.escape(form[FormName].value)
+	RedisKey = html.escape(form[FormName].value)
 
 print ("<h2>","<center>","Filtra chiave Redis","</center>","</h2>")
 print ("Puoi usare i caratteri \"*\" e \"?\", esempi:<br/>")

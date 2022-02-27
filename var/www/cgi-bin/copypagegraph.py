@@ -5,6 +5,7 @@
 # Serve per la parte di gestione html in python
 import cgi
 import cgitb
+import html
 
 # Abilita gli errori al server web/http
 cgitb.enable()
@@ -40,7 +41,7 @@ form=cgi.FieldStorage()
 if FormName not in form:
 	print ("<h3>Manca il valore: </h3>",FormName)
 else:
-	FileName = cgi.escape(form[FormName].value)
+	FileName = html.escape(form[FormName].value)
 
 TestoPagina = TestoPagina + FileName
 
@@ -54,7 +55,7 @@ print ("<h1>","<center>",TestoPagina,"</center>","</h1>")
 if NewFormName not in form:
 	print ("<h3>Manca il valore: </h3>",NewFormName)
 else:
-	NewFileName = cgi.escape(form[NewFormName].value)
+	NewFileName = html.escape(form[NewFormName].value)
 	print("Copia del file in corso ...<br/>")
 	try:
 		shutil.copy(FileName,Dirs[1]+NewFileName)

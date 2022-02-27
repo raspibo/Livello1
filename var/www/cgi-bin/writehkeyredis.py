@@ -10,6 +10,7 @@
 # Serve per la parte di gestione html in python
 import cgi
 import cgitb
+import html
 
 # Abilita gli errori al server web/http
 cgitb.enable()
@@ -54,18 +55,18 @@ form=cgi.FieldStorage()
 if "key" not in form:
 	print ("<h2>ERRORE: Non e` stata passata la chiave Redis</h2>")
 else:
-	RedisKey = cgi.escape(form["key"].value)
+	RedisKey = html.escape(form["key"].value)
 	# Se sono stati eliminati dei parametri, e` piu` facile eliminare la chiave e poi reinserire i dati.
 	MyDB.delete(RedisKey)
 	for i in form.keys():
 		if i not in form:							# Non ci sara` mai
 			print ("<h3>Manca il valore: </h3>",i)
-		elif cgi.escape(form[i].value) == "":		# Non sara` mai verificata
+		elif html.escape(form[i].value) == "":		# Non sara` mai verificata
 			print ("<h3>Non e` stato inserito un valore per </h3>",i)
 		elif i == "key":
 			pass	# e` la chiave, l'ho manipolata inizialmente
 		else:
-			MyDB.hset(RedisKey,i,cgi.escape(form[i].value))
+			MyDB.hset(RedisKey,i,html.escape(form[i].value))
 	
 	print ("<h2>Dati inseriti/modificati:</h2>")
 	print ("<br>")

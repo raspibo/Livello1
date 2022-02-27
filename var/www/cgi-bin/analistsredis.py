@@ -6,6 +6,7 @@
 # Serve per la parte di gestione html in python
 import cgi
 import cgitb
+import html
 
 # Abilita gli errori al server web/http
 cgitb.enable()
@@ -48,7 +49,7 @@ print ("<hr/>") # La linea orizzontale
 
 form=cgi.FieldStorage()
 try:
-    RedisKey = cgi.escape(form[FormName].value)     # Assegno alla chiave prima di ...
+    RedisKey = html.escape(form[FormName].value)     # Assegno alla chiave prima di ...
 except:
     print ("Errore: Non hai passato nessun valore")
     exit()
@@ -419,7 +420,7 @@ Il valore End=-1 sta` a significare l'ultimo elemento, il valore Start=-100 sta`
     # End form
     print (mhl.MyEndForm())
 else:
-    print ("Manca la chiave: <b>",cgi.escape(form[FormName].value),"</b><br/>oppure hai selezionato una chiave non modificabile.")
+    print ("Manca la chiave: <b>",html.escape(form[FormName].value),"</b><br/>oppure hai selezionato una chiave non modificabile.")
 
 
 # End web page
